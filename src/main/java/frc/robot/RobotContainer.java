@@ -4,11 +4,17 @@
 
 package frc.robot;
 
+import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Sequencer;
+import frc.robot.subsystems.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -17,10 +23,16 @@ import edu.wpi.first.wpilibj2.command.Command;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // Subsytems
+  DriveTrain driveTrain = new DriveTrain();
+  Climber climber = new Climber();
+  Intake intake = new Intake();
+  Sequencer sequencer = new Sequencer();
+  Shooter shooter = new Shooter();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  //OI
+  XboxController driverController = new XboxController(0);
+  XboxController operatorController = new XboxController(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -34,7 +46,44 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    JoystickButton intakeButton = new JoystickButton(driverController, 1);
+
+    intakeButton.whileHeld(null);
+
+    JoystickButton dropIntake = new JoystickButton(driverController, 1);
+
+    dropIntake.whenPressed(null);
+
+    JoystickButton shootButton = new JoystickButton(operatorController, 1);
+
+    shootButton.whileHeld(null);
+
+    JoystickButton climbButton = new JoystickButton(operatorController, 1);
+
+    climbButton.whenPressed(null);
+
+    JoystickButton runSequencerButton = new JoystickButton(operatorController, 1);
+
+    runSequencerButton.whileHeld(null);
+
+    JoystickButton pointLeftButton = new JoystickButton(operatorController, 1);
+
+    pointLeftButton.whenPressed(null);
+
+    JoystickButton pointRightButton = new JoystickButton(operatorController, 1);
+
+    pointRightButton.whenPressed(null);
+
+    JoystickButton pointForwardButton = new JoystickButton(operatorController, 1);
+
+    pointForwardButton.whenPressed(null);
+
+    JoystickButton pointBackButton = new JoystickButton(operatorController, 1);
+
+    pointBackButton.whenPressed(null);
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -43,6 +92,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }
