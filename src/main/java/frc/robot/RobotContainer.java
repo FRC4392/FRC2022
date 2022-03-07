@@ -4,15 +4,16 @@
 
 package frc.robot;
 
-import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.RobotCore;
 import frc.robot.subsystems.Sequencer;
 import frc.robot.subsystems.Shooter;
 
@@ -24,11 +25,12 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
   // Subsytems
-  DriveTrain driveTrain = new DriveTrain();
+  Drivetrain driveTrain = new Drivetrain();
   Climber climber = new Climber();
   Intake intake = new Intake();
   Sequencer sequencer = new Sequencer();
   Shooter shooter = new Shooter();
+  RobotCore pneumatics = new RobotCore();
 
   //OI
   XboxController driverController = new XboxController(0);
@@ -47,41 +49,42 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    JoystickButton intakeButton = new JoystickButton(driverController, 1);
+    JoystickButton intakeButton = new JoystickButton(driverController, 6);
+    intakeButton.whileHeld(new IntakeCommand(intake));
 
-    intakeButton.whileHeld(null);
+    driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
 
-    JoystickButton dropIntake = new JoystickButton(driverController, 1);
+    // JoystickButton dropIntake = new JoystickButton(driverController, 1);
 
-    dropIntake.whenPressed(null);
+    // dropIntake.whenPressed(null);
 
-    JoystickButton shootButton = new JoystickButton(operatorController, 1);
+    // JoystickButton shootButton = new JoystickButton(operatorController, 1);
 
-    shootButton.whileHeld(null);
+    // shootButton.whileHeld(null);
 
-    JoystickButton climbButton = new JoystickButton(operatorController, 1);
+    // JoystickButton climbButton = new JoystickButton(operatorController, 1);
 
-    climbButton.whenPressed(null);
+    // climbButton.whenPressed(null);
 
-    JoystickButton runSequencerButton = new JoystickButton(operatorController, 1);
+    // JoystickButton runSequencerButton = new JoystickButton(operatorController, 1);
 
-    runSequencerButton.whileHeld(null);
+    // runSequencerButton.whileHeld(null);
 
-    JoystickButton pointLeftButton = new JoystickButton(operatorController, 1);
+    // JoystickButton pointLeftButton = new JoystickButton(operatorController, 1);
 
-    pointLeftButton.whenPressed(null);
+    // pointLeftButton.whenPressed(null);
 
-    JoystickButton pointRightButton = new JoystickButton(operatorController, 1);
+    // JoystickButton pointRightButton = new JoystickButton(operatorController, 1);
 
-    pointRightButton.whenPressed(null);
+    // pointRightButton.whenPressed(null);
 
-    JoystickButton pointForwardButton = new JoystickButton(operatorController, 1);
+    // JoystickButton pointForwardButton = new JoystickButton(operatorController, 1);
 
-    pointForwardButton.whenPressed(null);
+    // pointForwardButton.whenPressed(null);
 
-    JoystickButton pointBackButton = new JoystickButton(operatorController, 1);
+    // JoystickButton pointBackButton = new JoystickButton(operatorController, 1);
 
-    pointBackButton.whenPressed(null);
+    // pointBackButton.whenPressed(null);
 
   }
 
