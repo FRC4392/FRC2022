@@ -18,7 +18,7 @@ import frc.robot.swerve.SwerveModuleV3;
 public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
 
-  private final CANSparkMax mDriveMotor1 = new CANSparkMax(11, MotorType.kBrushless);
+    private final CANSparkMax mDriveMotor1 = new CANSparkMax(11, MotorType.kBrushless);
     private final CANSparkMax mDriveMotor2 = new CANSparkMax(13, MotorType.kBrushless);
     private final CANSparkMax mDriveMotor3 = new CANSparkMax(15, MotorType.kBrushless);
     private final CANSparkMax mDriveMotor4 = new CANSparkMax(17, MotorType.kBrushless);

@@ -82,7 +82,7 @@ public class SwerveModuleV3 implements SwerveModule {
 
     @Override
     public void init() {
-        mAzimuthMotor.getEncoder().setPositionConversionFactor(1);
+        mAzimuthMotor.getEncoder().setPositionConversionFactor(1.0/35.94);
         mAzimuthMotor.setIdleMode(IdleMode.kBrake);
         mAzimuthMotor.setSmartCurrentLimit(20);
 
