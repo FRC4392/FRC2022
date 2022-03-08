@@ -45,9 +45,9 @@ public class DriveCommand extends CommandBase {
     lastScan = mController.getRawButton(7);
 
     boolean fieldRelative = !mController.getRightBumper();
-    //mDrivetrain.drive(yVel, xVel, rotVel, fieldRelative);
+    mDrivetrain.drive(yVel, xVel, rotVel, fieldRelative);
 
-    mDrivetrain.setModulesAngle(xVel);
+    //mDrivetrain.setModulesAngle(xVel);
   }
 
   // Called once the command ends or is interrupted.
