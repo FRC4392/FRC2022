@@ -85,7 +85,7 @@ public class SwerveModuleV3 implements SwerveModule {
         mAzimuthMotor.getEncoder().setPositionConversionFactor(360.0/35.94);
         mAzimuthMotor.setIdleMode(IdleMode.kBrake);
         mAzimuthMotor.setSmartCurrentLimit(20);
-        mAzimuthPID.setP(5);
+        mAzimuthPID.setP(0.05);
 
         mDriveMotor.setInverted(true);
         mDriveMotor.setClosedLoopRampRate(0);
