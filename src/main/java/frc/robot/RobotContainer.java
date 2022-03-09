@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.RobotCore;
@@ -31,6 +32,7 @@ public class RobotContainer {
   Sequencer sequencer = new Sequencer();
   Shooter shooter = new Shooter();
   RobotCore pneumatics = new RobotCore();
+  Conveyor conveyor = new Conveyor();
 
   //OI
   XboxController driverController = new XboxController(0);
@@ -50,7 +52,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     JoystickButton intakeButton = new JoystickButton(driverController, 6);
-    intakeButton.whileHeld(new IntakeCommand(intake));
+    intakeButton.whileHeld(new IntakeCommand(intake, conveyor));
 
     driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
 

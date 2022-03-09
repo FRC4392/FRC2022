@@ -37,6 +37,8 @@ public class SwerveModuleV3 implements SwerveModule {
         mAzimuthMotor = azimuthMotor;
         mLocation = location;
         mName = name;
+        mDriveMotor.restoreFactoryDefaults();
+        mAzimuthMotor.restoreFactoryDefaults();
 
         mAzimuthEncoder = mAzimuthMotor.getEncoder();
         mDriveEncoder = mDriveMotor.getEncoder();
