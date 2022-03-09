@@ -16,7 +16,7 @@ public class Conveyor extends SubsystemBase {
   public Conveyor() {
     floor.restoreFactoryDefaults();
     floor.setSmartCurrentLimit(30);
-    floor.setInverted(true);
+    floor.setInverted(false);
   }
 
   public void setSpeed(double speed) {
