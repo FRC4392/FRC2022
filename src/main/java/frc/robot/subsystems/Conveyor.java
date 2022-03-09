@@ -9,12 +9,19 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Climber extends SubsystemBase {
+public class Conveyor extends SubsystemBase {
 
-  private CANSparkMax climber1 = new CANSparkMax(41, MotorType.kBrushless);
-  private CANSparkMax climber2 = new CANSparkMax(42, MotorType.kBrushless);
-  /** Creates a new Climber. */
-  public Climber() {}
+  private CANSparkMax floor = new CANSparkMax(33, MotorType.kBrushless);
+  /** Creates a new Conveyor. */
+  public Conveyor() {
+    floor.restoreFactoryDefaults();
+    floor.setSmartCurrentLimit(30);
+    floor.setInverted(false);
+  }
+
+  public void setSpeed(double speed) {
+    floor.set(speed);
+  }
 
   @Override
   public void periodic() {

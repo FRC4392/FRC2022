@@ -15,7 +15,6 @@ public class Sequencer extends SubsystemBase {
 
   private CANSparkMax tower1 = new CANSparkMax(31, MotorType.kBrushless);
   private CANSparkMax tower2 = new CANSparkMax(32, MotorType.kBrushless);
-  private CANSparkMax floor = new CANSparkMax(33, MotorType.kBrushless);
   private CANifier canifier = new CANifier(34);
 
   private final static double indexSpeed = 0.35;
@@ -26,11 +25,6 @@ public class Sequencer extends SubsystemBase {
     public Sequencer() {
     tower1.setSmartCurrentLimit(30);
       tower2.setSmartCurrentLimit(30);
-      floor.setSmartCurrentLimit(30);
-    }
-  
-    public void setSpeed(double speed) {
-      floor.set(speed);
     }
 
     public void setTowerSpeed(double speed){
@@ -39,15 +33,14 @@ public class Sequencer extends SubsystemBase {
     }
   
     public void index(){
-      setSpeed(indexSpeed);
+      setTowerSpeed(indexSpeed);
     }
   
     public void feed(){
-      setSpeed(feedSpeed);
+      setTowerSpeed(feedSpeed);
     }
   
     public void stop(){
-      setSpeed(0);
       setTowerSpeed(0);
     }
   
