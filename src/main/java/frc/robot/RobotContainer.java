@@ -52,7 +52,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     JoystickButton intakeButton = new JoystickButton(driverController, 6);
-    intakeButton.whileHeld(new IntakeCommand(intake, conveyor));
+    intakeButton.whileHeld(new IntakeCommand(intake, conveyor, sequencer, shooter));
 
     driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
 

@@ -28,8 +28,8 @@ public class Sequencer extends SubsystemBase {
     }
 
     public void setTowerSpeed(double speed){
-      tower2.set(speed);
-      tower1.set(speed);
+      tower2.set(-speed);
+      tower1.set(-speed);
     }
   
     public void index(){

@@ -25,14 +25,15 @@ public class Shooter extends SubsystemBase {
 
   private double setpoint = 0;
   /** Creates a new Shooter. */
-  public Shooter() {  shooter1.setInverted(true);
-    shooter2.setInverted(true);
+  public Shooter() {  
+    shooter1.setInverted(true);
+    shooter2.setInverted(false);
     shooter2.follow(shooter1);
 
   }
     public void setVelocity(double velocity) {
-      
-      setpoint = velocity;
+      //setpoint = velocity;
+      shooter1.set(ControlMode.PercentOutput, velocity);
     }
 
     public void setPIDVelocity(double velocity) {
