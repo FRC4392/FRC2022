@@ -43,6 +43,7 @@ public class SwerveModuleV3 implements SwerveModule {
         mAzimuthEncoder = mAzimuthMotor.getEncoder();
         mDriveEncoder = mDriveMotor.getEncoder();
         mAzimuthAbsoluteEncoder = mAzimuthMotor.getAnalog(Mode.kAbsolute);
+        mAzimuthMotor.setInverted(true);
         mDriveEncoder.setPositionConversionFactor(.004356);
         mDriveEncoder.setVelocityConversionFactor((0.029/42.0));
         mDriveEncoder.setPosition(0);
@@ -103,6 +104,7 @@ public class SwerveModuleV3 implements SwerveModule {
         SmartDashboard.putNumber(mName + " Velocity", mDriveEncoder.getVelocity());
         SmartDashboard.putNumber(mName + "Drive Encoder Position", mDriveEncoder.getPosition());
         SmartDashboard.putNumber(mName + " Rotation Setpoint", setpoint);
+        SmartDashboard.putNumber(mName + "Percent Output", mDriveMotor.get());
     }
 
     @Override

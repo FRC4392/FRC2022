@@ -8,6 +8,7 @@ import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.CANifier.GeneralPin;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -23,8 +24,16 @@ public class Sequencer extends SubsystemBase {
 
   
     public Sequencer() {
-    tower1.setSmartCurrentLimit(30);
+      tower1.setSmartCurrentLimit(30);
+      tower1.setControlFramePeriodMs(50);
+      tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+      tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+      tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
       tower2.setSmartCurrentLimit(30);
+      tower2.setControlFramePeriodMs(50);
+      tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+      tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+      tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
     }
 
     public void setTowerSpeed(double speed){

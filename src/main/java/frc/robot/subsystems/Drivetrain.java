@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Translation2d;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.swerve.SwerveModuleV3;
@@ -30,10 +30,10 @@ public class Drivetrain extends SubsystemBase {
 
     private final PigeonIMU pidgey = new PigeonIMU(10);
 
-    private final SwerveModuleV3 Module1 = new SwerveModuleV3(mAzimuth1, mDriveMotor1, new Translation2d(-0.2346, 0.259999988), "Module 1");
-    private final SwerveModuleV3 Module2 = new SwerveModuleV3(mAzimuth2, mDriveMotor2, new Translation2d(0.2346, 0.259999988), "Module 2");
-    private final SwerveModuleV3 Module3 = new SwerveModuleV3(mAzimuth3, mDriveMotor3, new Translation2d(0.2346, -0.259999988), "Module 3");
-    private final SwerveModuleV3 Module4 = new SwerveModuleV3(mAzimuth4, mDriveMotor4, new Translation2d(-0.2346, 0.259999988), "Module 4");
+    private final SwerveModuleV3 Module1 = new SwerveModuleV3(mAzimuth1, mDriveMotor1, new Translation2d(0.259999988, 0.2346), "Module 1");
+    private final SwerveModuleV3 Module2 = new SwerveModuleV3(mAzimuth2, mDriveMotor2, new Translation2d(0.259999988, -0.2346), "Module 2");
+    private final SwerveModuleV3 Module3 = new SwerveModuleV3(mAzimuth3, mDriveMotor3, new Translation2d(-0.259999988, -0.2346), "Module 3");
+    private final SwerveModuleV3 Module4 = new SwerveModuleV3(mAzimuth4, mDriveMotor4, new Translation2d(-0.259999988,  0.2346), "Module 4");
 
     private final SwerveDrive mSwerveDrive = new SwerveDrive(pidgey::getFusedHeading, Module1, Module2, Module3, Module4);
 
@@ -45,11 +45,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
     public void drive(double forward, double strafe, double azimuth, boolean fieldRelative){
-      if (!fieldRelative){
-        forward = -forward;
-        strafe = -strafe;
-      }
-      azimuth = azimuth*(1.0/0.29);
+      azimuth = azimuth*2.5;
       mSwerveDrive.drive(forward, strafe, azimuth, fieldRelative);
     }
   
@@ -58,7 +54,7 @@ public class Drivetrain extends SubsystemBase {
         forward = -forward;
         strafe = -strafe;
       }
-      azimuth = azimuth*(1.0/0.29);
+      azimuth = azimuth*2.5;
       mSwerveDrive.driveClosedLoop(forward, strafe, azimuth, fieldRelative);
     }
   
@@ -74,6 +70,7 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
       mSwerveDrive.updateOdometry();
       mSwerveDrive.log();
+      SmartDashboard.putNumber("GyroAbs", pidgey.getFusedHeading());
     }
   
     public void setLocation(double x, double y, double angle){

@@ -5,11 +5,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.CANifier;
+import com.ctre.phoenix.CANifier.LEDChannel;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,6 +31,9 @@ public class Shooter extends SubsystemBase {
     shooter1.setInverted(true);
     shooter2.setInverted(false);
     shooter2.follow(shooter1);
+    hood.setIdleMode(IdleMode.kBrake);
+    canifier.setLEDOutput(.57, LEDChannel.LEDChannelC);
+    canifier.setLEDOutput(.26, LEDChannel.LEDChannelA);
 
   }
     public void setVelocity(double velocity) {
