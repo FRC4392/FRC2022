@@ -134,6 +134,7 @@ public class SwerveDrive {
         SmartDashboard.putNumber("SwerveXLocation", pose.getX());
         SmartDashboard.putNumber("SwerveYLocation", pose.getY());
         SmartDashboard.putNumber("SwerveRotation", pose.getRotation().getDegrees());
+        SmartDashboard.putNumber("GyroAngle", mGyroAngle.getAsDouble());
     }
 
     public void setLocation(double x, double y, double angle){

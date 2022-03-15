@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -20,6 +21,10 @@ public class Intake extends SubsystemBase {
   public Intake() {
 
     intake.setSmartCurrentLimit(20, 40, 5700);
+    intake.setControlFramePeriodMs(50);
+    intake.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+    intake.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+    intake.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
   }
 
   public void setSpeed(double speed) {

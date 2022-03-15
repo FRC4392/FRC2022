@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -17,6 +18,10 @@ public class Conveyor extends SubsystemBase {
     floor.restoreFactoryDefaults();
     floor.setSmartCurrentLimit(30);
     floor.setInverted(false);
+    floor.setControlFramePeriodMs(50);
+    floor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+    floor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+    floor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
   }
 
   public void setSpeed(double speed) {

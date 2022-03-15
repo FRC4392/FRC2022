@@ -7,15 +7,37 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
 
   private CANSparkMax climber1 = new CANSparkMax(41, MotorType.kBrushless);
   private CANSparkMax climber2 = new CANSparkMax(42, MotorType.kBrushless);
-  /** Creates a new Climber. */
-  public Climber() {}
+  private Solenoid pivot = new Solenoid(PneumaticsModuleType.REVPH, 1);
 
+  /** Creates a new Climber. */
+  public Climber() {
+    climber1.setInverted(true);
+    climber2.setInverted(false);
+    climber2.follow(climber1);
+  }
+  
+  
+  public void setSpeed(double speed) {
+    climber1.set(speed);
+  }
+  public void stop(){
+    climber1.set(0);
+}
+public void lift(){
+  pivot.set(true);
+  }
+
+public void lower(){
+  pivot.set(false);
+}
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

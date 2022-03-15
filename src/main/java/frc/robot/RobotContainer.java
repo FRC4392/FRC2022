@@ -8,8 +8,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.ShooterCommand;
+
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
@@ -52,10 +56,25 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     JoystickButton intakeButton = new JoystickButton(driverController, 6);
-    intakeButton.whileHeld(new IntakeCommand(intake, conveyor, sequencer, shooter));
+    JoystickButton climbButton = new JoystickButton(driverController, 7);
+    JoystickButton reverseClimbButton = new JoystickButton(driverController, 8);
+    JoystickButton shootButton = new JoystickButton(driverController, 5);
+    POVButton upClimb = new POVButton(driverController, 0);
+    POVButton downClimb = new POVButton(driverController, 180);
+ 
 
-    driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
+    intakeButton.whileHeld(new IntakeCommand(intake, conveyor, sequencer));
 
+    shootButton.whileHeld(new ShooterCommand(shooter));
+    climbButton.whileHeld(new ClimberCommand(climber , climbButton , driverController, upClimb, downClimb));
+    reverseClimbButton.whileHeld(new ClimberCommand(climber, reverseClimbButton, driverController, upClimb, downClimb));
+    upClimb.whileHeld(new ClimberCommand(climber , climbButton , driverController, upClimb, downClimb));
+    downClimb.whileHeld(new ClimberCommand(climber, reverseClimbButton, driverController, upClimb, downClimb));
+
+    //driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
+
+
+    
     // JoystickButton dropIntake = new JoystickButton(driverController, 1);
 
     // dropIntake.whenPressed(null);
