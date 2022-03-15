@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.CANifier;
+import com.ctre.phoenix.CANifier.LEDChannel;
+
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,10 +15,14 @@ public class RobotCore extends SubsystemBase {
 
   private PneumaticHub pneumaticHub = new PneumaticHub();
   private PowerDistribution powerDistribution = new PowerDistribution();
+  private CANifier robotCanifier = new CANifier(1);
+
   /** Creates a new Pneumatics. */
   public RobotCore() {
     pneumaticHub.enableCompressorAnalog(65, 110);
     powerDistribution.clearStickyFaults();
+
+    robotCanifier.setLEDOutput(1, LEDChannel.LEDChannelC);
   }
 
   @Override

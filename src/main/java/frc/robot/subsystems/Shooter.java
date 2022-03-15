@@ -42,6 +42,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setHood(double position){
+      
     }
 
     public boolean isAtSpeed(){
