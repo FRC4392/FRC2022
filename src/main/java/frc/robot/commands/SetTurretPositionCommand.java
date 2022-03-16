@@ -4,17 +4,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterCommand extends CommandBase {
-  public final Shooter mShooter;
-
-  /** Creates a new Intake. */
-  public ShooterCommand(Shooter shooter) {
+public class SetTurretPositionCommand extends CommandBase {
+  private Shooter mShooter;
+  /** Creates a new SetTurretPositionCommand. */
+  public SetTurretPositionCommand(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     mShooter = shooter;
   }
@@ -26,20 +22,12 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mShooter.setPIDVelocity(3420);
-    //2250 for fender shot
-    //62, 2300
-    //407, 3420 3380
-    mShooter.setHood(1);
-    SmartDashboard.putNumber("ShooterVelocity", mShooter.getVelocity());
+    mShooter.setTurretPosition(10);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    mShooter.setVelocity(0);
-    mShooter.setHood(0.0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

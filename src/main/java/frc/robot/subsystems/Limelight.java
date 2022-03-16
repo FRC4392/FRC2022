@@ -4,11 +4,13 @@
 
 package frc.robot.subsystems;
 
+import java.util.NoSuchElementException;
 import java.util.OptionalDouble;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
@@ -19,16 +21,16 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry ledSetting;
   private NetworkTableEntry camMode;
 
-  private double heightDifference = 0.0;
-  private double limelightAngle = 0.0;
+  private double heightDifference = 102.625-39.6550;
+  private double limelightAngle = 32.5;
 
 
-  enum camMode {
+  public enum camMode {
     kVisionMode,
     kDriverMode
   }
 
-  enum LedMode {
+  public enum LedMode {
     kOff,
     kBlink,
     kOn,
@@ -39,7 +41,7 @@ public class Limelight extends SubsystemBase {
     limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     targetValid = limelightTable.getEntry("tv");
     targetAngle = limelightTable.getEntry("tx");
-    targetHeight = limelightTable.getEntry("tv");
+    targetHeight = limelightTable.getEntry("ty");
     ledSetting = limelightTable.getEntry("ledMode");
     camMode = limelightTable.getEntry("camMode");
   }
@@ -66,7 +68,7 @@ public class Limelight extends SubsystemBase {
         return OptionalDouble.empty();
       } else {
         double distance = 0.0;
-        distance = heightDifference/(Math.tan(heightAngle + limelightAngle)*Math.cos(angleOffset));
+        distance = heightDifference/(Math.tan(Math.toRadians(heightAngle + limelightAngle))*Math.cos(Math.toRadians(angleOffset)));
         return OptionalDouble.of(distance);
       }
     }
@@ -102,5 +104,11 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    try {
+      SmartDashboard.putNumber("limelightDistance", getDistanceToTarget().getAsDouble());
+      SmartDashboard.putNumber("limelightAngle", getAngleOffset().getAsDouble());
+    } catch (NoSuchElementException e) {
+      //TODO: handle exception
+    }
   }
 }

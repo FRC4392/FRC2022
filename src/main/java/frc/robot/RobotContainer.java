@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.SetTurretPositionCommand;
+import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ShooterCommand;
 
@@ -18,9 +20,11 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotCore;
 import frc.robot.subsystems.Sequencer;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Limelight.LedMode;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,6 +41,7 @@ public class RobotContainer {
   Shooter shooter = new Shooter();
   RobotCore pneumatics = new RobotCore();
   Conveyor conveyor = new Conveyor();
+  Limelight limelight = new Limelight();
 
   //OI
   XboxController driverController = new XboxController(0);
@@ -46,6 +51,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    limelight.setLEDMode(LedMode.kOn);
   }
 
   /**
@@ -65,10 +71,10 @@ public class RobotContainer {
 
     intakeButton.whileHeld(new IntakeCommand(intake, conveyor, sequencer));
 
-    shootButton.whileHeld(new ShooterCommand(shooter));
+    shootButton.whileHeld(new AutoShootCommand(shooter, limelight));
     climbButton.whileHeld(new ClimberCommand(climber , climbButton , driverController, upClimb, downClimb));
     reverseClimbButton.whileHeld(new ClimberCommand(climber, reverseClimbButton, driverController, upClimb, downClimb));
-    upClimb.whileHeld(new ClimberCommand(climber , climbButton , driverController, upClimb, downClimb));
+    upClimb.whileHeld(new SetTurretPositionCommand(shooter));
     downClimb.whileHeld(new ClimberCommand(climber, reverseClimbButton, driverController, upClimb, downClimb));
 
     //driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
