@@ -10,25 +10,29 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Sequencer extends SubsystemBase {
 
   private CANSparkMax tower1 = new CANSparkMax(31, MotorType.kBrushless);
   private CANSparkMax tower2 = new CANSparkMax(32, MotorType.kBrushless);
-  private CANifier canifier = new CANifier(34);
+  private DigitalInput startEye = new DigitalInput(1);
+  private DigitalInput endEye = new DigitalInput(0);
 
-  private final static double indexSpeed = 0.35;
-  private final static double feedSpeed = .8;
+  private final static double indexSpeed = 0.3;
+  private final static double feedSpeed = 0.8;
   /** Creates a new Sequencer. */
 
   
     public Sequencer() {
+      tower1.setInverted(false);
       tower1.setSmartCurrentLimit(30);
       tower1.setControlFramePeriodMs(50);
       tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
       tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
       tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
+      tower2.setInverted(true);
       tower2.setSmartCurrentLimit(30);
       tower2.setControlFramePeriodMs(50);
       tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
@@ -37,12 +41,12 @@ public class Sequencer extends SubsystemBase {
     }
 
     public void setTowerSpeed(double speed){
-      tower2.set(-speed);
-      tower1.set(-speed);
+      tower2.set(speed);
+      tower1.set(speed);
     }
   
     public void index(){
-      setTowerSpeed(indexSpeed);
+      tower2.set(indexSpeed);
     }
   
     public void feed(){
@@ -54,11 +58,11 @@ public class Sequencer extends SubsystemBase {
     }
   
     public boolean getStartEye(){
-      return !canifier.getGeneralInput(GeneralPin.SPI_MISO_PWM2P);
+      return startEye.get();
     }
   
     public boolean getEndEye() {
-      return !canifier.getGeneralInput(GeneralPin.SPI_MOSI_PWM1P);
+      return endEye.get();
     }
   
     public void log(){

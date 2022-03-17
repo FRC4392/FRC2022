@@ -4,9 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
@@ -30,15 +27,14 @@ public class ShooterCommand extends CommandBase {
     //2250 for fender shot
     //62, 2300
     //407, 3420 3380
-    mShooter.setHood(1);
-    SmartDashboard.putNumber("ShooterVelocity", mShooter.getVelocity());
+    //mShooter.setHood(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     mShooter.setVelocity(0);
-    mShooter.setHood(0.0);
+    //mShooter.setHood(0.0);
   }
 
   // Returns true when the command should end.

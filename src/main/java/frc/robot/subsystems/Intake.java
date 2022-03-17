@@ -16,7 +16,7 @@ public class Intake extends SubsystemBase {
 
   private CANSparkMax intake = new CANSparkMax(21, MotorType.kBrushless);
   private Solenoid pivot = new Solenoid(PneumaticsModuleType.REVPH, 0);
-  private static final double intakeSpeed = 0.5;
+  private static final double intakeSpeed = .75;
   /** Creates a new Intake. */
   public Intake() {
 

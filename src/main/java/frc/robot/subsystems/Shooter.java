@@ -44,6 +44,7 @@ public class Shooter extends SubsystemBase {
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> speedMap = new InterpolatingTreeMap<>();
   static {
     speedMap.put(new InterpolatingDouble(62.0), new InterpolatingDouble(2300.0));
+    speedMap.put(new InterpolatingDouble(240.0), new InterpolatingDouble(2650.0));
     speedMap.put(new InterpolatingDouble(407.0), new InterpolatingDouble(3420.0));
   }
 
@@ -73,15 +74,19 @@ public class Shooter extends SubsystemBase {
     hoodPID = hood.getPIDController();
     hoodPID.setP(4.0);
 
+    turret.setSoftLimit(SoftLimitDirection.kForward, 100);
+    turret.setSoftLimit(SoftLimitDirection.kReverse, -100);
+
     turretEncoder = turret.getEncoder();
+    turretEncoder.setPositionConversionFactor(360.0/112.0);
     turretPID = turret.getPIDController();
-    turretPID.setP(4.0);
+    turretPID.setP(0.05);
 
     turretEncoder.setPosition(cancoder.getPosition());
 
 
-    canifier.setLEDOutput(.57, LEDChannel.LEDChannelC);
-    canifier.setLEDOutput(.26, LEDChannel.LEDChannelA);
+    canifier.setLEDOutput(1, LEDChannel.LEDChannelC);
+    canifier.setLEDOutput(0, LEDChannel.LEDChannelA);
 
   }
     public void setVelocity(double velocity) {
@@ -126,9 +131,16 @@ public class Shooter extends SubsystemBase {
      turretPID.setReference(position, ControlType.kPosition);
    }
 
+   public double getAngle(){
+     return turretEncoder.getPosition();
+   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("hoodEncoder", hoodEncoder.getPosition());
+    SmartDashboard.putNumber("turretEncoder", turretEncoder.getPosition());
+    SmartDashboard.putNumber("turretAbsolute", cancoder.getPosition());
+    SmartDashboard.putNumber("shooterVelocity", nativeunitstorpm(shooter1.getSelectedSensorVelocity()));
   }
 }

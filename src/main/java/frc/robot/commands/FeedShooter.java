@@ -5,14 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Sequencer;
 
-public class SetTurretPositionCommand extends CommandBase {
-  private Shooter mShooter;
-  /** Creates a new SetTurretPositionCommand. */
-  public SetTurretPositionCommand(Shooter shooter) {
+public class FeedShooter extends CommandBase {
+  /** Creates a new FeedShooter. */
+  private Sequencer mSequencer;
+  public FeedShooter(Sequencer sequencer) {
     // Use addRequirements() here to declare subsystem dependencies.
-    mShooter = shooter;
+    mSequencer = sequencer;
+    addRequirements(sequencer);
   }
 
   // Called when the command is initially scheduled.
@@ -22,13 +23,13 @@ public class SetTurretPositionCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mShooter.setTurretPosition(90);
+    mSequencer.feed();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    mShooter.setTurretPosition(-90);
+    mSequencer.stop();
   }
 
   // Returns true when the command should end.

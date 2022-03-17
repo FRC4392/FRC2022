@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import org.opencv.core.Mat;
+
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -14,6 +16,7 @@ public class AutoShootCommand extends CommandBase {
   private Shooter mShooter;
   private Limelight mLimelight;
   LinearFilter DistanceFilter = LinearFilter.movingAverage(5);
+  LinearFilter AngleFilter = LinearFilter.movingAverage(2);
   /** Creates a new AutoShootCommand. */
   public AutoShootCommand(Shooter shooter, Limelight limelight) {
     mShooter = shooter;
@@ -33,10 +36,21 @@ public class AutoShootCommand extends CommandBase {
     try {
       
       double limelightDistance = DistanceFilter.calculate(mLimelight.getDistanceToTarget().getAsDouble());
+      double limeLightAngle = AngleFilter.calculate(mLimelight.getAngleOffset().getAsDouble());
 
       mShooter.setHood(mShooter.getHoodPositionForDistance(limelightDistance));
       mShooter.setPIDVelocity(mShooter.getShooterVelocityForDistance(limelightDistance));
+
+      double targetAngle = limeLightAngle + mShooter.getAngle();
+
+      if (Math.abs(targetAngle) > 95){
+        targetAngle = 0;
+      }
+      mShooter.setTurretPosition(targetAngle);
       SmartDashboard.putNumber("AutoAimDistance", limelightDistance);
+      SmartDashboard.putNumber("limelightAngle", targetAngle);
+      SmartDashboard.putNumber("targetAngle", targetAngle);
+      SmartDashboard.putNumber("wantedShotPower", mShooter.getShooterVelocityForDistance(limelightDistance));
     } catch (Exception e) {
       //TODO: handle exception
       e.printStackTrace();

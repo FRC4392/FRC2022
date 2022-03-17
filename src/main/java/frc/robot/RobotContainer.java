@@ -10,12 +10,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.FeedShooter;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SetTurretPositionCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ShooterCommand;
-
+import frc.robot.commands.indexCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
@@ -61,23 +62,23 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    JoystickButton intakeButton = new JoystickButton(driverController, 6);
-    JoystickButton climbButton = new JoystickButton(driverController, 7);
-    JoystickButton reverseClimbButton = new JoystickButton(driverController, 8);
-    JoystickButton shootButton = new JoystickButton(driverController, 5);
-    POVButton upClimb = new POVButton(driverController, 0);
-    POVButton downClimb = new POVButton(driverController, 180);
+    JoystickButton intakeButton = new JoystickButton(driverController, 5);
+    //JoystickButton climbButton = new JoystickButton(driverController, 7);
+    //JoystickButton reverseClimbButton = new JoystickButton(driverController, 8);
+    JoystickButton shootButton = new JoystickButton(operatorController, 6);
+    //POVButton upClimb = new POVButton(driverController, 0);
+    //POVButton downClimb = new POVButton(driverController, 180);
+    JoystickButton feedButton = new JoystickButton(operatorController, 5);
  
 
-    intakeButton.whileHeld(new IntakeCommand(intake, conveyor, sequencer));
+    intakeButton.whileHeld(new IntakeCommand(intake, conveyor));
 
-    shootButton.whileHeld(new AutoShootCommand(shooter, limelight));
-    climbButton.whileHeld(new ClimberCommand(climber , climbButton , driverController, upClimb, downClimb));
-    reverseClimbButton.whileHeld(new ClimberCommand(climber, reverseClimbButton, driverController, upClimb, downClimb));
-    upClimb.whileHeld(new SetTurretPositionCommand(shooter));
-    downClimb.whileHeld(new ClimberCommand(climber, reverseClimbButton, driverController, upClimb, downClimb));
+    shootButton.whileHeld(new ShooterCommand(shooter));
 
-    //driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
+    feedButton.whileHeld(new FeedShooter(sequencer));
+
+    driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
+    sequencer.setDefaultCommand(new indexCommand(sequencer));
 
 
     
