@@ -44,7 +44,7 @@ public class Shooter extends SubsystemBase {
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> speedMap = new InterpolatingTreeMap<>();
   static {
     speedMap.put(new InterpolatingDouble(62.0), new InterpolatingDouble(2300.0));
-    speedMap.put(new InterpolatingDouble(240.0), new InterpolatingDouble(2650.0));
+    speedMap.put(new InterpolatingDouble(240.0), new InterpolatingDouble(200.0));
     speedMap.put(new InterpolatingDouble(407.0), new InterpolatingDouble(3420.0));
   }
 

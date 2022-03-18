@@ -4,37 +4,48 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterCommand extends CommandBase {
-  public final Shooter mShooter;
-
-  /** Creates a new Intake. */
-  public ShooterCommand(Shooter shooter) {
+public class ClimbCommand extends CommandBase {
+  /** Creates a new ClimbCommand. */
+  Climber mClimber;
+  Shooter mShooter;
+  XboxController mController;
+  public ClimbCommand(Climber climber, Shooter shooter, XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
+    mClimber = climber;
     mShooter = shooter;
+
+    addRequirements(climber, shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    mShooter.setTurretPosition(0);
+    mShooter.setVelocity(0);
+    mShooter.setHood(0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mShooter.setPIDVelocity(1000);
-    //2250 for fender shot
-    //62, 2300
-    //407, 3420 3380
-    //mShooter.setHood(1);
+    mClimber.setSpeed(mController.getLeftY());
+    if (mController.getAButton()){
+      mClimber.lower();
+    } else {
+      mClimber.lift();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    mShooter.setVelocity(0);
-    //mShooter.setHood(0.0);
+    mClimber.lift();
+    mClimber.stop();
   }
 
   // Returns true when the command should end.

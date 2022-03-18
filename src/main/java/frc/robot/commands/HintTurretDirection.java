@@ -7,13 +7,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterCommand extends CommandBase {
-  public final Shooter mShooter;
-
-  /** Creates a new Intake. */
-  public ShooterCommand(Shooter shooter) {
+public class HintTurretDirection extends CommandBase {
+  Shooter mShooter;
+  double mPosition;
+  /** Creates a new HintTurretDirection. */
+  public HintTurretDirection(Shooter shooter, double position) {
     // Use addRequirements() here to declare subsystem dependencies.
     mShooter = shooter;
+    mPosition = position;
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -23,19 +25,12 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mShooter.setPIDVelocity(1000);
-    //2250 for fender shot
-    //62, 2300
-    //407, 3420 3380
-    //mShooter.setHood(1);
+    mShooter.setTurretPosition(mPosition);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    mShooter.setVelocity(0);
-    //mShooter.setHood(0.0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
