@@ -19,7 +19,7 @@ public class Sequencer extends SubsystemBase {
   private DigitalInput endEye = new DigitalInput(0);
 
   private final static double indexSpeed = 0.3;
-  private final static double feedSpeed = 0.8;
+  private final static double feedSpeed = .5;
   /** Creates a new Sequencer. */
 
   
@@ -27,15 +27,16 @@ public class Sequencer extends SubsystemBase {
       tower1.setInverted(false);
       tower1.setSmartCurrentLimit(30);
       tower1.setControlFramePeriodMs(50);
-      tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
-      tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-      tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
+      tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 65535);
+      tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 65535);
+      tower1.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 65535);
+      
       tower2.setInverted(true);
       tower2.setSmartCurrentLimit(30);
       tower2.setControlFramePeriodMs(50);
-      tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
-      tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-      tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
+      tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 65535);
+      tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 65535);
+      tower2.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 65535);
     }
 
     public void setTowerSpeed(double speed){

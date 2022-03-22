@@ -4,46 +4,57 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 
-public class IntakeCommand extends CommandBase {
-  public final Intake mIntake;
-  public final Conveyor mConveyor;
-
-  /** Creates a new Intake. */
-  public IntakeCommand(Intake intake, Conveyor conveyor) {
+public class DumbAutoDrive extends CommandBase {
+  Drivetrain mDrivetrain;
+  double mStartPosition;
+  Intake mIntake;
+  double mStartTime;
+  /** Creates a new DumbAutoDrive. */
+  public DumbAutoDrive(Drivetrain drivetrain, double startPosition, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
+    mDrivetrain = drivetrain;
+    mStartPosition = startPosition;
     mIntake = intake;
-    mConveyor = conveyor;
-    
-    addRequirements(mIntake, mConveyor);
+
+    addRequirements(mDrivetrain, mIntake);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    mDrivetrain.setGyro(mStartPosition);
+    mIntake.lower();
+    mStartTime = Timer.getFPGATimestamp();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mIntake.lower();
+    double driveSpeed = -.5;
+
+    if (Timer.getFPGATimestamp() - mStartTime > 1){
+      driveSpeed = 0;
+    }
+    mDrivetrain.drive(driveSpeed, 0, 0, false);
     mIntake.intake();
-    mConveyor.setSpeed(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    mIntake.lift();
+    mDrivetrain.stop();
     mIntake.stop();
-    mConveyor.setSpeed(0);
+    mIntake.lift();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Timer.getFPGATimestamp() - mStartTime > 2;
   }
 }

@@ -5,16 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Sequencer;
+import frc.robot.subsystems.Conveyor;
 
-public class FeedShooter extends CommandBase {
-  /** Creates a new FeedShooter. */
-  private Sequencer mSequencer;
-  public FeedShooter(Sequencer sequencer) {
+public class DefaultConveyor extends CommandBase {
+  /** Creates a new DefaultConveyor. */
+  Conveyor mConveyor;
+  public DefaultConveyor(Conveyor conveyor) {
     // Use addRequirements() here to declare subsystem dependencies.
-    mSequencer = sequencer;
-    
-    addRequirements(sequencer);
+    mConveyor = conveyor;
+
+    addRequirements(conveyor);
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +24,13 @@ public class FeedShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mSequencer.feed();
+    mConveyor.setSpeed(.25);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    mSequencer.stop();
+    mConveyor.setSpeed(0);
   }
 
   // Returns true when the command should end.

@@ -6,20 +6,23 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DumbAutoDrive;
 import frc.robot.commands.FeedShooter;
 import frc.robot.commands.HintTurretDirection;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.SetTurretPositionCommand;
+import frc.robot.commands.AutoFeedCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.ClimbCommand;
-import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.DefaultConveyor;
 import frc.robot.commands.indexCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
@@ -47,6 +50,7 @@ public class RobotContainer {
   RobotCore pneumatics = new RobotCore();
   Conveyor conveyor = new Conveyor();
   Limelight limelight = new Limelight();
+  SendableChooser<Double> autoChooser = new SendableChooser<>();
 
   //OI
   XboxController driverController = new XboxController(0);
@@ -56,7 +60,10 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    limelight.setLEDMode(LedMode.kOn);
+    limelight.setLEDMode(LedMode.kOff);
+    autoChooser.addOption("Left", Double.valueOf(135));
+    autoChooser.setDefaultOption("Right", Double.valueOf(-156));
+    SmartDashboard.putData(autoChooser);
   }
 
   /**
@@ -95,7 +102,7 @@ public class RobotContainer {
     JoystickButton feedButton = new JoystickButton(operatorController, 5);
  
 
-    intakeButton.whileHeld(new IntakeCommand(intake, conveyor));
+    intakeButton.toggleWhenActive(new IntakeCommand(intake, conveyor));
 
     shootButton.whileHeld(new AutoShootCommand(shooter, limelight));
 
@@ -103,6 +110,7 @@ public class RobotContainer {
 
     driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
     sequencer.setDefaultCommand(new indexCommand(sequencer));
+    conveyor.setDefaultCommand(new DefaultConveyor(conveyor));
 
   }
 
@@ -113,6 +121,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    double startPosition = autoChooser.getSelected().doubleValue();
+    ParallelCommandGroup shootandfeed = new ParallelCommandGroup(new AutoShootCommand(shooter, limelight), new AutoFeedCommand(sequencer));
+    return new SequentialCommandGroup(new DumbAutoDrive(driveTrain, startPosition, intake), shootandfeed);
   }
 }

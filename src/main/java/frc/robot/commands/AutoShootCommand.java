@@ -20,6 +20,8 @@ public class AutoShootCommand extends CommandBase {
   public AutoShootCommand(Shooter shooter, Limelight limelight) {
     mShooter = shooter;
     mLimelight = limelight;
+
+    addRequirements(mShooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

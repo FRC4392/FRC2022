@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.MotorCommutation;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
@@ -18,6 +20,7 @@ public class ClimbCommand extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     mClimber = climber;
     mShooter = shooter;
+    mController = controller;
 
     addRequirements(climber, shooter);
   }
@@ -37,7 +40,7 @@ public class ClimbCommand extends CommandBase {
     if (mController.getAButton()){
       mClimber.lower();
     } else {
-      mClimber.lift();
+      mClimber.lift(); 
     }
   }
 

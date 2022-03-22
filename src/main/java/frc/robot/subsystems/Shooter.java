@@ -7,7 +7,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.CANifier.LEDChannel;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
@@ -38,13 +40,16 @@ public class Shooter extends SubsystemBase {
   private CANCoder cancoder = new CANCoder(56);
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> hoodMap = new InterpolatingTreeMap<>();
   static {
-    hoodMap.put(new InterpolatingDouble(62.0), new InterpolatingDouble(0.0));
+    hoodMap.put(new InterpolatingDouble(62.0), new InterpolatingDouble(.1));
+    hoodMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(.25));
     hoodMap.put(new InterpolatingDouble(407.0), new InterpolatingDouble(1.0));
   }
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> speedMap = new InterpolatingTreeMap<>();
   static {
-    speedMap.put(new InterpolatingDouble(62.0), new InterpolatingDouble(2300.0));
-    speedMap.put(new InterpolatingDouble(240.0), new InterpolatingDouble(200.0));
+    speedMap.put(new InterpolatingDouble(62.0), new InterpolatingDouble(2000.0));
+    speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(2500.0));
+    speedMap.put(new InterpolatingDouble(150.0), new InterpolatingDouble(2800.0));
+    speedMap.put(new InterpolatingDouble(240.0), new InterpolatingDouble(3000.0));
     speedMap.put(new InterpolatingDouble(407.0), new InterpolatingDouble(3420.0));
   }
 
@@ -54,14 +59,14 @@ public class Shooter extends SubsystemBase {
     
     shooter1.setInverted(true);
     shooter1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    shooter1.config_kF(0, 0.055);
-    shooter1.config_kP(0, 0.1);
+    shooter1.config_kF(0, 0.05598);
+    shooter1.config_kP(0, 0.005102);
     shooter1.configPeakOutputReverse(0);
     shooter1.configPeakOutputForward(1);
     shooter1.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
 
-    shooter2.setInverted(false);
-    shooter2.follow(shooter1);
+    shooter2.setInverted(TalonFXInvertType.OpposeMaster);
+    shooter2.set(ControlMode.Follower, shooter1.getDeviceID());
 
     hood.setIdleMode(IdleMode.kBrake);
     hood.setSoftLimit(SoftLimitDirection.kReverse, 0.0f);
@@ -80,10 +85,10 @@ public class Shooter extends SubsystemBase {
     turretEncoder = turret.getEncoder();
     turretEncoder.setPositionConversionFactor(360.0/112.0);
     turretPID = turret.getPIDController();
-    turretPID.setP(0.05);
+    turretPID.setP(0.01);
+    turretPID.setOutputRange(-.5, .5);
 
     turretEncoder.setPosition(cancoder.getPosition());
-
 
     canifier.setLEDOutput(1, LEDChannel.LEDChannelC);
     canifier.setLEDOutput(0, LEDChannel.LEDChannelA);
@@ -96,6 +101,7 @@ public class Shooter extends SubsystemBase {
 
     public void setPIDVelocity(double velocity) {
       shooter1.set(ControlMode.Velocity, rpmtonativeunits(velocity));
+      shooter1.set(ControlMode.Velocity, rpmtonativeunits(velocity), DemandType.ArbitraryFeedForward, 0.05);
       setpoint = velocity;
     }
 

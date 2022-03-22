@@ -81,6 +81,10 @@ public class Drivetrain extends SubsystemBase {
     public void resetGyro(){
       pidgey.setFusedHeading(0);
     }
+
+    public void setGyro(double position){
+      pidgey.setFusedHeading(position);
+    }
   
     public double getRotation() {
       return pidgey.getFusedHeading();

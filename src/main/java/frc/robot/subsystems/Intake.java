@@ -16,15 +16,14 @@ public class Intake extends SubsystemBase {
 
   private CANSparkMax intake = new CANSparkMax(21, MotorType.kBrushless);
   private Solenoid pivot = new Solenoid(PneumaticsModuleType.REVPH, 0);
-  private static final double intakeSpeed = .75;
+  private static final double intakeSpeed = 1;
   /** Creates a new Intake. */
   public Intake() {
 
     intake.setSmartCurrentLimit(20, 40, 5700);
-    intake.setControlFramePeriodMs(50);
-    intake.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
-    intake.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-    intake.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
+    intake.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 65535);
+    intake.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 65535);
+    intake.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 65535);
   }
 
   public void setSpeed(double speed) {
@@ -33,7 +32,7 @@ public class Intake extends SubsystemBase {
   
   public void intake(){
       setSpeed(intakeSpeed);
-  }
+  } 
   
   public void stop(){
       intake.set(0);

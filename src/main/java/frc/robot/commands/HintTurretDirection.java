@@ -15,6 +15,7 @@ public class HintTurretDirection extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     mShooter = shooter;
     mPosition = position;
+    
     addRequirements(shooter);
   }
 

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -19,24 +20,35 @@ public class Climber extends SubsystemBase {
 
   /** Creates a new Climber. */
   public Climber() {
+    climber1.restoreFactoryDefaults();
+    climber2.restoreFactoryDefaults();
     climber1.setInverted(true);
     climber2.setInverted(false);
-    climber2.follow(climber1);
+
+    climber1.setIdleMode(IdleMode.kBrake);
+    climber2.setIdleMode(IdleMode.kBrake);
+
+    
+
+    climber1.burnFlash();
+    climber2.burnFlash();
   }
   
   
   public void setSpeed(double speed) {
     climber1.set(speed);
+    climber2.set(speed);
   }
   public void stop(){
     climber1.set(0);
+    climber2.set(0);
 }
 public void lift(){
-  pivot.set(true);
+  pivot.set(false);
   }
 
 public void lower(){
-  pivot.set(false);
+  pivot.set(true);
 }
   @Override
   public void periodic() {

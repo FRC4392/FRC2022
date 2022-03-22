@@ -18,10 +18,9 @@ public class Conveyor extends SubsystemBase {
     floor.restoreFactoryDefaults();
     floor.setSmartCurrentLimit(30);
     floor.setInverted(false);
-    floor.setControlFramePeriodMs(50);
-    floor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
-    floor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-    floor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
+    floor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 65535);
+    floor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 65535);
+    floor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 65535);
   }
 
   public void setSpeed(double speed) {
