@@ -7,8 +7,6 @@
 
 package frc.robot.commands;
 
-import org.deceivers.util.JoystickHelper;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
@@ -17,10 +15,6 @@ public class DriveCommand extends CommandBase {
   public final Drivetrain mDrivetrain;
   public XboxController mController;
   private boolean lastScan;
-
-  private JoystickHelper xHelper =  new JoystickHelper(0);
-  private JoystickHelper yHelper = new JoystickHelper(0);
-  private JoystickHelper rotHelper = new JoystickHelper(0);
   
   public DriveCommand(Drivetrain Drivetrain, XboxController XboxController) {
     mDrivetrain = Drivetrain;
@@ -43,22 +37,30 @@ public class DriveCommand extends CommandBase {
 
     yVel = mController.getLeftY();
     xVel = mController.getLeftX();
+
+    if (Math.abs(yVel) < 0.09){
+      yVel = 0;
+    }
+
+    if (Math.abs(xVel) < 0.09){
+      xVel = 0;
+    }
+
     rotVel = mController.getRightX();
 
-    yVel = yHelper.setInput(yVel).applyDeadband(0.09).value;
-    xVel = xHelper.setInput(xVel).applyDeadband(0.09).value;
-    rotVel = rotHelper.setInput(rotVel).applyDeadband(0.09).value;
+    if (Math.abs(rotVel) < 0.09){
+      rotVel = 0;
+    }
     
     if (mController.getRawButton(7) &! lastScan){
       mDrivetrain.resetGyro();
     }
-
     lastScan = mController.getRawButton(7);
 
     boolean fieldRelative = !mController.getRightBumper();
-
     mDrivetrain.drive(yVel, xVel, rotVel, fieldRelative);
 
+    //mDrivetrain.setModulesAngle(xVel);
   }
 
   // Called once the command ends or is interrupted.
