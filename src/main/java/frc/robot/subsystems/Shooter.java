@@ -61,10 +61,13 @@ public class Shooter extends SubsystemBase {
     shooter1.setInverted(true);
     shooter1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     shooter1.config_kF(0, 0.05598);
-    shooter1.config_kP(0, 0.005102);
+    //shooter1.config_kP(0, 0.005102);
+    shooter1.config_kP(0, 0.1);
     shooter1.configPeakOutputReverse(0);
     shooter1.configPeakOutputForward(1);
     shooter1.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
+    shooter1.configVoltageCompSaturation(11);
+    shooter1.enableVoltageCompensation(true);
     for (StatusFrame statusFrame : StatusFrame.values()) {
       shooter1.setStatusFramePeriod(statusFrame, 20);
       shooter2.setStatusFramePeriod(statusFrame, 255);
