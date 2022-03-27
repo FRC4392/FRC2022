@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.CANifier;
+import com.ctre.phoenix.CANifierStatusFrame;
 import com.ctre.phoenix.CANifier.LEDChannel;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
@@ -25,6 +26,13 @@ public class RobotCore extends SubsystemBase {
     powerDistribution.clearStickyFaults();
 
     robotCanifier.setLEDOutput(1, LEDChannel.LEDChannelC);
+    robotCanifier.setStatusFramePeriod(CANifierStatusFrame.Status_1_General, 255);
+    robotCanifier.setStatusFramePeriod(CANifierStatusFrame.Status_2_General, 255);
+    robotCanifier.setStatusFramePeriod(CANifierStatusFrame.Status_3_PwmInputs0, 255);
+    robotCanifier.setStatusFramePeriod(CANifierStatusFrame.Status_4_PwmInputs1, 255);
+    robotCanifier.setStatusFramePeriod(CANifierStatusFrame.Status_5_PwmInputs2, 255);
+    robotCanifier.setStatusFramePeriod(CANifierStatusFrame.Status_6_PwmInputs3, 255);
+    robotCanifier.setStatusFramePeriod(CANifierStatusFrame.Status_8_Misc, 255);
     driverCamera = CameraServer.startAutomaticCapture();
     driverCamera.setVideoMode(PixelFormat.kYUYV, 160, 120, 20);
   }

@@ -13,6 +13,8 @@ import com.revrobotics.SparkMaxAnalogSensor.Mode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModuleV3 implements SwerveModule {
@@ -28,12 +30,13 @@ public class SwerveModuleV3 implements SwerveModule {
     private final String mName; 
     private boolean isInverted;
     private double setpoint;
-    private SparkMaxAnalogSensor mAnalog;
+    private Counter AbsoluteEncoderPWM;
+    private double mOffset;
 
     //need to update the speed to m/s
 
     public SwerveModuleV3(CANSparkMax azimuthMotor, CANSparkMax driveMotor,
-            Translation2d location, String name) {
+            Translation2d location, int AbsoluteAddress, double offset, String name) {
         mDriveMotor = driveMotor;
         mAzimuthMotor = azimuthMotor;
         mLocation = location;
@@ -41,7 +44,12 @@ public class SwerveModuleV3 implements SwerveModule {
         mDriveMotor.restoreFactoryDefaults();
         mAzimuthMotor.restoreFactoryDefaults();
 
-        mAnalog = mAzimuthMotor.getAnalog(Mode.kAbsolute);
+        AbsoluteEncoderPWM = new Counter(Counter.Mode.kSemiperiod);
+        AbsoluteEncoderPWM.setUpSource(AbsoluteAddress);
+        AbsoluteEncoderPWM.setSemiPeriodMode(true);
+
+        mOffset = offset;
+
         mAzimuthEncoder = mAzimuthMotor.getEncoder();
         mDriveEncoder = mDriveMotor.getEncoder();
         mAzimuthAbsoluteEncoder = mAzimuthMotor.getAnalog(Mode.kAbsolute);
@@ -88,7 +96,7 @@ public class SwerveModuleV3 implements SwerveModule {
 
     @Override
     public void init() {
-        mAzimuthMotor.getEncoder().setPositionConversionFactor(360.0/35.94);
+        mAzimuthEncoder.setPositionConversionFactor(360.0/35.94);
         mAzimuthMotor.setIdleMode(IdleMode.kBrake);
         mAzimuthMotor.setSmartCurrentLimit(20);
         mAzimuthPID.setP(0.05);
@@ -106,8 +114,8 @@ public class SwerveModuleV3 implements SwerveModule {
 
     @Override
     public void log() {
-        SmartDashboard.putNumber(mName + "Absolute Voltage", mAnalog.getVoltage());
-        SmartDashboard.putNumber(mName + "Absolute Position", (((1-(mAnalog.getVoltage()/3.3))*360)-180));
+        SmartDashboard.putNumber(mName + " Azimuth Position", mAzimuthEncoder.getPosition());
+        SmartDashboard.putNumber(mName + "PWM Length", AbsoluteEncoderPWM.getPeriod());
         SmartDashboard.putNumber(mName + " Incremental Position", mAzimuthEncoder.getPosition());
         SmartDashboard.putNumber(mName + " Velocity", mDriveEncoder.getVelocity());
         SmartDashboard.putNumber(mName + "Drive Encoder Position", mDriveEncoder.getPosition());
@@ -174,11 +182,19 @@ public class SwerveModuleV3 implements SwerveModule {
     }
     
     public void setAzimuthZero() {
-        //calculate position to increments
-        // double position = ((1-(mAnalog.getVoltage() / 3.3))*360)-180;
+        // calculate position to increments
+        SmartDashboard.putNumber(mName + " Init Position" , AbsoluteEncoderPWM.getPeriod());
+        double position = ((1-((AbsoluteEncoderPWM.getPeriod()-mOffset-0.000001)/0.004095))*360.0)%360.0;
 
-        // @SuppressWarnings("unused")
-        // REVLibError err = mAzimuthEncoder.setPosition(position);
+        // SmartDashboard.putNumber(mName + " Init Position" , AbsoluteEncoderPWM.getPeriod());
+        SmartDashboard.putNumber(mName + " Zero Position", position);
+
+        REVLibError err;
+
+        do{
+            err = mAzimuthEncoder.setPosition(position);
+            SmartDashboard.putNumber(mName + " Error", err.value);
+        } while (err != REVLibError.kOk);
     }
 
 	@Override

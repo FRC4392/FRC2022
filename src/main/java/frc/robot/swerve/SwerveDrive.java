@@ -46,6 +46,7 @@ public class SwerveDrive {
         mSwerveDriveOdometry = new SwerveDriveOdometry(mKinematics, Rotation2d.fromDegrees(mGyroAngle.getAsDouble()));
 
         Arrays.stream(mModules).forEach(SwerveModule::init);
+        Arrays.stream(mModules).forEach(SwerveModule::init);
 
 //        TrajectoryConfig config = new TrajectoryConfig(2.5, 1);
 //        config.setKinematics(mKinematics);

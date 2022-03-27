@@ -17,8 +17,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DumbAutoDrive;
 import frc.robot.commands.FeedShooter;
+import frc.robot.commands.FeedWhenReadyCommand;
+import frc.robot.commands.FixedShotCommand;
 import frc.robot.commands.HintTurretDirection;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ManualMoveTurretCommand;
+import frc.robot.commands.ReverseTowerCommand;
+import frc.robot.commands.SwerveBrakeCommand;
+import frc.robot.commands.AutoEjectCommand;
 import frc.robot.commands.AutoFeedCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.ClimbCommand;
@@ -42,7 +48,6 @@ import frc.robot.subsystems.Limelight.LedMode;
  */
 public class RobotContainer {
   // Subsytems
-  Drivetrain driveTrain = new Drivetrain();
   Climber climber = new Climber();
   Intake intake = new Intake();
   Sequencer sequencer = new Sequencer();
@@ -55,6 +60,8 @@ public class RobotContainer {
   //OI
   XboxController driverController = new XboxController(0);
   XboxController operatorController = new XboxController(1);
+
+  Drivetrain driveTrain = new Drivetrain();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -85,6 +92,29 @@ public class RobotContainer {
       return (operatorController.getLeftTriggerAxis() > 0) && (operatorController.getRightTriggerAxis()>0);
     });
 
+    //trigger for reverse tower Left trigger (done)
+    Trigger reverseTowerTrigger = new Trigger(() -> {
+      return (operatorController.getLeftTriggerAxis() > 0);
+    });
+
+    //manual move turret Right Toggle down (done)
+    JoystickButton manualMoveButton = new JoystickButton(operatorController, XboxController.Button.kRightStick.value);
+    //fixed shot buttons A B X Y (done)
+    JoystickButton fixedShotOneButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    JoystickButton fixedShotTwoButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
+    JoystickButton fixedShotThreeButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
+    JoystickButton fixedShotFourButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
+
+    //swerve brake B button (done)
+    JoystickButton brakeButton = new JoystickButton(driverController, XboxController.Button.kB.value);
+    //auto feed overrides normal feed (done)
+
+    //auto eject button Right trigger (done)
+    Trigger autoEjectTrigger = new Trigger(() -> {
+      return (operatorController.getRightTriggerAxis() > 0);
+    });
+
+
     hintForwardButton.whileHeld(new HintTurretDirection(shooter, 0));
     hint45LeftButton.whileHeld(new HintTurretDirection(shooter, -45));
     hint45RightButton.whileHeld(new HintTurretDirection(shooter, 45));
@@ -92,6 +122,15 @@ public class RobotContainer {
     hintRightButton.whileHeld(new HintTurretDirection(shooter, 90));
 
     ClimbTrigger.whileActiveContinuous(new ClimbCommand(climber, shooter, operatorController));
+
+    reverseTowerTrigger.whileActiveContinuous(new ReverseTowerCommand(sequencer));
+    manualMoveButton.whenPressed(new ManualMoveTurretCommand(shooter, operatorController));
+    fixedShotOneButton.whenPressed(new FixedShotCommand(shooter, 500));
+    fixedShotTwoButton.whenPressed(new FixedShotCommand(shooter, 500));
+    fixedShotThreeButton.whenPressed(new FixedShotCommand(shooter, 500));
+    fixedShotFourButton.whenPressed(new FixedShotCommand(shooter, 500));
+    brakeButton.whileActiveContinuous(new SwerveBrakeCommand(driveTrain));
+    autoEjectTrigger.whileActiveContinuous(new AutoEjectCommand(sequencer, shooter));
 
 
     //JoystickButton climbButton = new JoystickButton(driverController, 7);
@@ -106,7 +145,7 @@ public class RobotContainer {
 
     shootButton.whileHeld(new AutoShootCommand(shooter, limelight));
 
-    feedButton.whileHeld(new FeedShooter(sequencer));
+    feedButton.whileHeld(new FeedWhenReadyCommand(sequencer, shooter));
 
     driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
     sequencer.setDefaultCommand(new indexCommand(sequencer));

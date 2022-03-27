@@ -51,6 +51,10 @@ public class Sequencer extends SubsystemBase {
     public void feed(){
       setTowerSpeed(feedSpeed);
     }
+
+    public void reverse(){
+      setTowerSpeed(-.25);
+    }
   
     public void stop(){
       setTowerSpeed(0);

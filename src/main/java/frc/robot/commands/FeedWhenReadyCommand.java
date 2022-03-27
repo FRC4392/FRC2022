@@ -4,33 +4,30 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Sequencer;
+import frc.robot.subsystems.Shooter;
 
-public class AutoFeedCommand extends CommandBase {
-  Sequencer mSequencer;
-  double startTime;
-  /** Creates a new AutoFeedCommand. */
-  public AutoFeedCommand(Sequencer sequencer) {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class FeedWhenReadyCommand extends CommandBase {
+  private Sequencer mSequencer;
+  private Shooter mShooter;
+  /** Creates a new FeedWhenReadyCommand. */
+  public FeedWhenReadyCommand(Sequencer sequencer, Shooter shooter) {
     mSequencer = sequencer;
-
-    addRequirements(sequencer);
+    addRequirements(mSequencer);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    startTime = Timer.getFPGATimestamp();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Timer.getFPGATimestamp() - startTime > 3){
+    if (mShooter.isReady()){
       mSequencer.feed();
-    } else {
+    } else{
       mSequencer.stop();
     }
   }

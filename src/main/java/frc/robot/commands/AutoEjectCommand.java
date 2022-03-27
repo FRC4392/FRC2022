@@ -4,41 +4,41 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Sequencer;
+import frc.robot.subsystems.Shooter;
 
-public class AutoFeedCommand extends CommandBase {
-  Sequencer mSequencer;
-  double startTime;
-  /** Creates a new AutoFeedCommand. */
-  public AutoFeedCommand(Sequencer sequencer) {
+public class AutoEjectCommand extends CommandBase {
+  private Sequencer mSequencer;
+  private Shooter mShooter;
+  /** Creates a new AutoEjectCommand. */
+  public AutoEjectCommand(Sequencer tower, Shooter shooter) {
+    mSequencer = tower;
+    mShooter = shooter;
+    addRequirements(mSequencer, mShooter);
     // Use addRequirements() here to declare subsystem dependencies.
-    mSequencer = sequencer;
-
-    addRequirements(sequencer);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
+    mShooter.setTurretPosition(0);
+    mShooter.setHood(1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Timer.getFPGATimestamp() - startTime > 3){
-      mSequencer.feed();
-    } else {
-      mSequencer.stop();
-    }
+    mShooter.setPIDVelocity(500);
+    mSequencer.feed();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    mShooter.setHood(0);
     mSequencer.stop();
+    mShooter.setVelocity(0);
   }
 
   // Returns true when the command should end.

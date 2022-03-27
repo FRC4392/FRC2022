@@ -9,6 +9,7 @@ import com.ctre.phoenix.CANifier.LEDChannel;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -64,6 +65,10 @@ public class Shooter extends SubsystemBase {
     shooter1.configPeakOutputReverse(0);
     shooter1.configPeakOutputForward(1);
     shooter1.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
+    for (StatusFrame statusFrame : StatusFrame.values()) {
+      shooter1.setStatusFramePeriod(statusFrame, 20);
+      shooter2.setStatusFramePeriod(statusFrame, 255);
+    }
 
     shooter2.setInverted(TalonFXInvertType.OpposeMaster);
     shooter2.set(ControlMode.Follower, shooter1.getDeviceID());
@@ -137,8 +142,16 @@ public class Shooter extends SubsystemBase {
      turretPID.setReference(position, ControlType.kPosition);
    }
 
+   public void setTurretSpeed(double speed){
+     turret.set(speed);
+   }
+
    public double getAngle(){
      return turretEncoder.getPosition();
+   }
+   
+   public boolean isReady(){
+     return true;
    }
 
   @Override
