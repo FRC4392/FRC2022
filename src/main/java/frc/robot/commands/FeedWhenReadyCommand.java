@@ -32,7 +32,6 @@ public class FeedWhenReadyCommand extends CommandBase {
       mSequencer.stop();
     }
   }
-f
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

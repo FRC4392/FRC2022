@@ -126,9 +126,9 @@ public class RobotContainer {
     reverseTowerTrigger.whileActiveContinuous(new ReverseTowerCommand(sequencer));
     manualMoveButton.whenPressed(new ManualMoveTurretCommand(shooter, operatorController));
     fixedShotOneButton.whenPressed(new FixedShotCommand(shooter, 500));
-    fixedShotTwoButton.whenPressed(new FixedShotCommand(shooter, 500));
-    fixedShotThreeButton.whenPressed(new FixedShotCommand(shooter, 500));
-    fixedShotFourButton.whenPressed(new FixedShotCommand(shooter, 500));
+    fixedShotTwoButton.whenPressed(new FixedShotCommand(shooter, 400));
+    fixedShotThreeButton.whenPressed(new FixedShotCommand(shooter, 300));
+    fixedShotFourButton.whenPressed(new FixedShotCommand(shooter, 200));
     brakeButton.whileActiveContinuous(new SwerveBrakeCommand(driveTrain));
     autoEjectTrigger.whileActiveContinuous(new AutoEjectCommand(sequencer, shooter));
 
