@@ -14,6 +14,7 @@ public class FeedWhenReadyCommand extends CommandBase {
   /** Creates a new FeedWhenReadyCommand. */
   public FeedWhenReadyCommand(Sequencer sequencer, Shooter shooter) {
     mSequencer = sequencer;
+    mShooter = shooter;
     addRequirements(mSequencer);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -31,7 +32,7 @@ public class FeedWhenReadyCommand extends CommandBase {
       mSequencer.stop();
     }
   }
-
+f
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
