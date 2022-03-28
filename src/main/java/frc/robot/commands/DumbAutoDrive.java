@@ -48,8 +48,7 @@ public class DumbAutoDrive extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     mDrivetrain.stop();
-    mIntake.stop();
-    mIntake.lift();
+   // mIntake.stop();
   }
 
   // Returns true when the command should end.

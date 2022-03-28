@@ -44,14 +44,6 @@ public class DriveCommand extends CommandBase {
     yVel = mController.getLeftY();
     xVel = mController.getLeftX();
 
-    if (Math.abs(yVel) < 0.09){
-      yVel = 0;
-    }
-
-    if (Math.abs(xVel) < 0.09){
-      xVel = 0;
-    }
-
     rotVel = mController.getRightX();
 
     yVel = yHelper.setInput(yVel).applyDeadband(0.1).value;

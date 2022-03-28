@@ -60,7 +60,7 @@ public class Shooter extends SubsystemBase {
     
     shooter1.setInverted(true);
     shooter1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    shooter1.config_kF(0, 0.05598);
+    shooter1.config_kF(0, 0.054);
     //shooter1.config_kP(0, 0.005102);
     shooter1.config_kP(0, 0.1);
     shooter1.configPeakOutputReverse(0);
@@ -100,7 +100,7 @@ public class Shooter extends SubsystemBase {
 
     canifier.setLEDOutput(1, LEDChannel.LEDChannelC);
     canifier.setLEDOutput(0, LEDChannel.LEDChannelA);
-
+  
   }
     public void setVelocity(double velocity) {
       //setpoint = velocity;
