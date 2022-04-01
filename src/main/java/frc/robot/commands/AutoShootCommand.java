@@ -108,6 +108,7 @@ public class AutoShootCommand extends CommandBase {
       SmartDashboard.putNumber("wantedShotPower", mShooter.getShooterVelocityForDistance(limelightDistance));
     } catch (Exception e) {
       e.printStackTrace();
+      mShooter.setTurretSpeed(0);
     }
   }
 
