@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,6 +46,7 @@ import frc.robot.subsystems.Limelight.LedMode;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
+
 public class RobotContainer {
   // Subsytems
   Climber climber = new Climber();
@@ -55,6 +57,7 @@ public class RobotContainer {
   Conveyor conveyor = new Conveyor();
   Limelight limelight = new Limelight();
   SendableChooser<Double> autoChooser = new SendableChooser<>();
+  double currentTime = (2*60+30)*1000; //time of match in milliseconds
 
   //OI
   XboxController driverController = new XboxController(0);
@@ -114,6 +117,14 @@ public class RobotContainer {
     });
 
 
+    if(((System.currentTimeMillis()-currentTime) <= 40) && (System.currentTimeMillis()-currentTime >38)){
+      operatorController.setRumble(RumbleType.kLeftRumble, 1);
+      operatorController.setRumble(RumbleType.kRightRumble, 1);
+    } else{
+      operatorController.setRumble(RumbleType.kLeftRumble, 0);
+      operatorController.setRumble(RumbleType.kRightRumble, 0);
+    }
+    
     hintForwardButton.whileHeld(new HintTurretDirection(shooter, 0));
     hint45LeftButton.whileHeld(new HintTurretDirection(shooter, -45));
     hint45RightButton.whileHeld(new HintTurretDirection(shooter, 45));

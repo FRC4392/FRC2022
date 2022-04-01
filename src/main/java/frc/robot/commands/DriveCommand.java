@@ -21,7 +21,7 @@ public class DriveCommand extends CommandBase {
   private JoystickHelper xHelper = new JoystickHelper(0);
   private JoystickHelper yHelper = new JoystickHelper(0);
   private JoystickHelper rotHelper = new JoystickHelper(0);
-  
+  double driveFactor = 1;
   public DriveCommand(Drivetrain Drivetrain, XboxController XboxController) {
     mDrivetrain = Drivetrain;
     mController = XboxController;
@@ -44,12 +44,21 @@ public class DriveCommand extends CommandBase {
     yVel = mController.getLeftY();
     xVel = mController.getLeftX();
 
-    rotVel = mController.getRightX();
+    //slow down button
+    if(mController.getRightBumper()){
+      driveFactor = 0.4;
+    } else {
+      driveFactor = 1.0;
+    }
 
+    rotVel = mController.getRightX();
     yVel = yHelper.setInput(yVel).applyDeadband(0.1).value;
     xVel = xHelper.setInput(xVel).applyDeadband(0.1).value;
     rotVel = rotHelper.setInput(rotVel).applyDeadband(0.1).value;
     
+    yVel = yVel*driveFactor;
+    xVel = xVel*driveFactor;
+    rotVel = rotVel*driveFactor;
     rotVel = -rotVel;
 
     if (mController.getRawButton(7) &! lastScan){
