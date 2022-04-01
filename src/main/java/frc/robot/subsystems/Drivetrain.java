@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.swerve.SwerveDrive;
@@ -30,10 +31,10 @@ public class Drivetrain extends SubsystemBase {
 
     private final PigeonIMU pidgey = new PigeonIMU(10);
 
-    private final SwerveModuleV3 Module1 = new SwerveModuleV3(mAzimuth1, mDriveMotor1, new Translation2d(0.259999988, 0.2346), 3, 0.002197, "Module 1");
-    private final SwerveModuleV3 Module2 = new SwerveModuleV3(mAzimuth2, mDriveMotor2, new Translation2d(0.259999988, -0.2346), 4, 0.003812, "Module 2");
-    private final SwerveModuleV3 Module3 = new SwerveModuleV3(mAzimuth3, mDriveMotor3, new Translation2d(-0.259999988, -0.2346), 5, 0.003792, "Module 3");
-    private final SwerveModuleV3 Module4 = new SwerveModuleV3(mAzimuth4, mDriveMotor4, new Translation2d(-0.259999988,  0.2346), 6, 0.001376, "Module 4");
+    private final SwerveModuleV3 Module1 = new SwerveModuleV3(mAzimuth1, mDriveMotor1, new Translation2d(0.259999988, 0.2346), 3, 0.0001683, "Module 1");
+    private final SwerveModuleV3 Module2 = new SwerveModuleV3(mAzimuth2, mDriveMotor2, new Translation2d(0.259999988, -0.2346), 4, 0.003196, "Module 2");
+    private final SwerveModuleV3 Module3 = new SwerveModuleV3(mAzimuth3, mDriveMotor3, new Translation2d(-0.259999988, -0.2346), 5, 0.001770, "Module 3");
+    private final SwerveModuleV3 Module4 = new SwerveModuleV3(mAzimuth4, mDriveMotor4, new Translation2d(-0.259999988,  0.2346), 6, 0.003367, "Module 4");
 
     private final SwerveDrive mSwerveDrive = new SwerveDrive(pidgey::getFusedHeading, Module1, Module2, Module3, Module4);
 
@@ -58,6 +59,7 @@ public class Drivetrain extends SubsystemBase {
       mSwerveDrive.driveClosedLoop(forward, strafe, azimuth, fieldRelative);
     }
   
+
     public void stop(){
       mSwerveDrive.stop();
     }
@@ -75,9 +77,14 @@ public class Drivetrain extends SubsystemBase {
   
     public void setLocation(double x, double y, double angle){
       mSwerveDrive.setLocation(x, y, angle);
-  
     }
   
+    //derek
+    public ChassisSpeeds getSpeeds(){
+      ChassisSpeeds chassisSpeeds = mSwerveDrive.getChassisSpeeds();
+      return(chassisSpeeds);
+    }
+
     public void resetGyro(){
       pidgey.setFusedHeading(0);
     }

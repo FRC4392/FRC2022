@@ -50,6 +50,8 @@ public class DriveCommand extends CommandBase {
     xVel = xHelper.setInput(xVel).applyDeadband(0.1).value;
     rotVel = rotHelper.setInput(rotVel).applyDeadband(0.1).value;
     
+    rotVel = -rotVel;
+
     if (mController.getRawButton(7) &! lastScan){
       mDrivetrain.resetGyro();
     }

@@ -111,7 +111,18 @@ public class SwerveDrive {
         for (int i = 0; i < numModules; i++) {
             states[i] = mModules[i].getState();
         }
+
         return mSwerveDriveOdometry.update(Rotation2d.fromDegrees(mGyroAngle.getAsDouble()), states);
+    }
+
+    //derek
+    public ChassisSpeeds getChassisSpeeds(){
+        SwerveModuleState[] states = new SwerveModuleState[numModules];
+        for (int i = 0; i < numModules; i++) {
+            states[i] = mModules[i].getState();
+        }
+        ChassisSpeeds chassisSpeeds = mKinematics.toChassisSpeeds(states);
+        return(chassisSpeeds);
     }
 
     public void followPath(double startTime){

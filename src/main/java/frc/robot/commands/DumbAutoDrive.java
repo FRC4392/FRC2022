@@ -35,7 +35,7 @@ public class DumbAutoDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double driveSpeed = -.5;
+    double driveSpeed = 0.5;
 
     if (Timer.getFPGATimestamp() - mStartTime > 1){
       driveSpeed = 0;
@@ -48,6 +48,7 @@ public class DumbAutoDrive extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     mDrivetrain.stop();
+    //mIntake.lift(); // lifts intake at the end of auto hopefully
    // mIntake.stop();
   }
 

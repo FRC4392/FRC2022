@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Counter;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModuleV3 implements SwerveModule {
@@ -55,7 +54,7 @@ public class SwerveModuleV3 implements SwerveModule {
         mAzimuthAbsoluteEncoder = mAzimuthMotor.getAnalog(Mode.kAbsolute);
         mAzimuthMotor.setInverted(true);
         mDriveEncoder.setPositionConversionFactor(.004356);
-        mDriveEncoder.setVelocityConversionFactor((0.029/42.0));
+        mDriveEncoder.setVelocityConversionFactor((0.02394/(4.5*60)));
         mDriveEncoder.setPosition(0);
         mDrivePID = mDriveMotor.getPIDController();
         mDrivePID.setFF(0.30);

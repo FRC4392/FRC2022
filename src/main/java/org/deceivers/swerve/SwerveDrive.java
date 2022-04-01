@@ -110,8 +110,10 @@ public class SwerveDrive {
         for (int i = 0; i < numModules; i++) {
             states[i] = mModules[i].getState();
         }
+                
         return mSwerveDriveOdometry.update(Rotation2d.fromDegrees(mGyroAngle.getAsDouble()), states);
     }
+    
 
     public void followPath(double startTime){
         Trajectory.State goal = trajectory.sample(Timer.getFPGATimestamp() - startTime);

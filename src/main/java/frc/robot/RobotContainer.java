@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DumbAutoDrive;
-import frc.robot.commands.FeedShooter;
 import frc.robot.commands.FeedWhenReadyCommand;
 import frc.robot.commands.FixedShotCommand;
 import frc.robot.commands.HintTurretDirection;
@@ -125,10 +124,12 @@ public class RobotContainer {
 
     reverseTowerTrigger.whileActiveContinuous(new ReverseTowerCommand(sequencer));
     manualMoveButton.whenPressed(new ManualMoveTurretCommand(shooter, operatorController));
-    fixedShotOneButton.whenPressed(new FixedShotCommand(shooter, 500));
-    fixedShotTwoButton.whenPressed(new FixedShotCommand(shooter, 400));
-    fixedShotThreeButton.whenPressed(new FixedShotCommand(shooter, 300));
-    fixedShotFourButton.whenPressed(new FixedShotCommand(shooter, 200));
+
+    fixedShotOneButton.whileHeld(new FixedShotCommand(shooter, 500));
+    fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 400));
+    fixedShotThreeButton.whileHeld(new FixedShotCommand(shooter, 300));
+    fixedShotFourButton.whileHeld(new FixedShotCommand(shooter, 200));
+    
     brakeButton.whileActiveContinuous(new SwerveBrakeCommand(driveTrain));
     autoEjectTrigger.whileActiveContinuous(new AutoEjectCommand(sequencer, shooter));
 
@@ -143,7 +144,7 @@ public class RobotContainer {
 
     intakeButton.toggleWhenActive(new IntakeCommand(intake, conveyor));
 
-    shootButton.whileHeld(new AutoShootCommand(shooter, limelight));
+    shootButton.whileHeld(new AutoShootCommand(shooter, limelight, driverController, driveTrain));
 
     feedButton.whileHeld(new FeedWhenReadyCommand(sequencer, shooter));
 
@@ -161,7 +162,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     double startPosition = autoChooser.getSelected().doubleValue();
-    ParallelCommandGroup shootandfeed = new ParallelCommandGroup(new AutoShootCommand(shooter, limelight), new AutoFeedCommand(sequencer));
+    ParallelCommandGroup shootandfeed = new ParallelCommandGroup(new AutoShootCommand(shooter, limelight, driverController, driveTrain), new AutoFeedCommand(sequencer));
     return new SequentialCommandGroup(new DumbAutoDrive(driveTrain, startPosition, intake), shootandfeed);
   }
 }

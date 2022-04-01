@@ -53,8 +53,17 @@ public class Shooter extends SubsystemBase {
     speedMap.put(new InterpolatingDouble(240.0), new InterpolatingDouble(3000.0));
     speedMap.put(new InterpolatingDouble(407.0), new InterpolatingDouble(3420.0));
   }
+  private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> distanceMap = new InterpolatingTreeMap<>();
+  static {
+    distanceMap.put(new InterpolatingDouble(2000.0), new InterpolatingDouble(62.0));
+    distanceMap.put(new InterpolatingDouble(2500.0), new InterpolatingDouble(100.0));
+    distanceMap.put(new InterpolatingDouble(2800.0), new InterpolatingDouble(150.0));
+    distanceMap.put(new InterpolatingDouble(3000.0), new InterpolatingDouble(240.0));
+    distanceMap.put(new InterpolatingDouble(3420.0), new InterpolatingDouble(407.0));
+  }
 
-  private double setpoint = 0;
+  private double setpoint = 0; //gets used in setPIDVelocity, probably doesn't ned to be a global variable
+
   /** Creates a new Shooter. */
   public Shooter() {  
     
@@ -136,6 +145,11 @@ public class Shooter extends SubsystemBase {
     public double getShooterVelocityForDistance(double distance){
        return speedMap.getInterpolated(new InterpolatingDouble(distance)).value;
     }
+
+    //derek
+    public double getDistanceFromShooterVelocity(double velocity){
+      return distanceMap.getInterpolated(new InterpolatingDouble(velocity)).value;
+   }
 
     public double getHoodPositionForDistance(double distance){
       return hoodMap.getInterpolated(new InterpolatingDouble(distance)).value;
