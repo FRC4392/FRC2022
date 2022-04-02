@@ -5,17 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 
 public class HintTurretDirection extends CommandBase {
   Shooter mShooter;
   double mPosition;
+  Drivetrain mDrivetrain;
   /** Creates a new HintTurretDirection. */
-  public HintTurretDirection(Shooter shooter, double position) {
+  public HintTurretDirection(Shooter shooter, double position, Drivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     mShooter = shooter;
     mPosition = position;
-    
+    mDrivetrain = drivetrain;
     addRequirements(shooter);
   }
 
@@ -26,6 +28,11 @@ public class HintTurretDirection extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    mPosition = mPosition + mDrivetrain.getRotation();
+    if (Math.abs(mPosition) > 95)
+    {
+      mPosition = 0;
+    }
     mShooter.setTurretPosition(mPosition , 0);
   }
 

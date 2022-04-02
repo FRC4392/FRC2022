@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.filter.LinearFilter;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -107,12 +106,13 @@ double oldAdjustment = 0;
       }
       mShooter.setTurretPosition(targetAngle, speeds.omegaRadiansPerSecond); 
       
-      SmartDashboard.putNumber("romtoft",rpmtoft);
+      SmartDashboard.putNumber("rpmtoft",rpmtoft);
 
       SmartDashboard.putNumber("MoveShotPower", vdesired * rpmtoft * mToFt);
       SmartDashboard.putNumber("MoveAdjustment", (adjustment * radtodeg) * turretFactor);
       SmartDashboard.putNumber("Vx",speeds.vxMetersPerSecond * mToFt);
       SmartDashboard.putNumber("Vy",speeds.vyMetersPerSecond * mToFt);
+      SmartDashboard.putNumber("vNet",vnet * mToFt);
 
       SmartDashboard.putNumber("AutoAimDistance", limelightDistance);
       SmartDashboard.putNumber("limelightAngle", limeLightAngle);

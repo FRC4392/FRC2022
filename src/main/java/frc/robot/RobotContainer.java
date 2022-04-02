@@ -112,25 +112,15 @@ public class RobotContainer {
     //auto feed overrides normal feed (done)
 
     //auto eject button Right trigger (done)
-   
     Trigger autoEjectTrigger = new Trigger(() -> {
       return (operatorController.getRightTriggerAxis() > 0) && !(operatorController.getLeftTriggerAxis() > 0);
     });
-
-
-    if(((System.currentTimeMillis()-currentTime) <= 40) && (System.currentTimeMillis()-currentTime >38)){
-      operatorController.setRumble(RumbleType.kLeftRumble, 1);
-      operatorController.setRumble(RumbleType.kRightRumble, 1);
-    } else{
-      operatorController.setRumble(RumbleType.kLeftRumble, 0);
-      operatorController.setRumble(RumbleType.kRightRumble, 0);
-    }
     
-    hintForwardButton.whileHeld(new HintTurretDirection(shooter, 0));
-    hint45LeftButton.whileHeld(new HintTurretDirection(shooter, -45));
-    hint45RightButton.whileHeld(new HintTurretDirection(shooter, 45));
-    hintLeftButton.whileHeld(new HintTurretDirection(shooter, -90));
-    hintRightButton.whileHeld(new HintTurretDirection(shooter, 90));
+    hintForwardButton.whileHeld(new HintTurretDirection(shooter, 0, driveTrain));
+    hint45LeftButton.whileHeld(new HintTurretDirection(shooter, -45, driveTrain));
+    hint45RightButton.whileHeld(new HintTurretDirection(shooter, 45, driveTrain));
+    hintLeftButton.whileHeld(new HintTurretDirection(shooter, -90, driveTrain));
+    hintRightButton.whileHeld(new HintTurretDirection(shooter, 90, driveTrain));
 
     ClimbTrigger.whileActiveContinuous(new ClimbCommand(climber, shooter, operatorController));
 

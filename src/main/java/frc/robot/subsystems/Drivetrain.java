@@ -40,6 +40,11 @@ public class Drivetrain extends SubsystemBase {
 
   public Drivetrain() {
     pidgey.setFusedHeading(0);
+    mDriveMotor1.enableVoltageCompensation(11);
+    mDriveMotor2.enableVoltageCompensation(11);
+    mDriveMotor3.enableVoltageCompensation(11);
+    mDriveMotor4.enableVoltageCompensation(11);
+
     //setLocation(3.892, 1.295, 0 ); //Slalom
     //setLocation(1.1661376518218622, 2.2212145748987857, 0 ); //Barrel Run
     setStartPosition();
