@@ -97,7 +97,7 @@ public class RobotContainer {
     //trigger for reverse tower Left trigger (done)
     Trigger reverseTowerTrigger = new Trigger(() -> {
       return (operatorController.getLeftTriggerAxis() > 0) && !(operatorController.getRightTriggerAxis() > 0);
-    });
+    }); 
 
     //manual move turret Right Toggle down (done)
     JoystickButton manualMoveButton = new JoystickButton(operatorController, XboxController.Button.kRightStick.value);
@@ -112,6 +112,7 @@ public class RobotContainer {
     //auto feed overrides normal feed (done)
 
     //auto eject button Right trigger (done)
+   
     Trigger autoEjectTrigger = new Trigger(() -> {
       return (operatorController.getRightTriggerAxis() > 0) && !(operatorController.getLeftTriggerAxis() > 0);
     });

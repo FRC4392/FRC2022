@@ -21,6 +21,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -155,8 +156,12 @@ public class Shooter extends SubsystemBase {
       return hoodMap.getInterpolated(new InterpolatingDouble(distance)).value;
    }
 
-   public void setTurretPosition(double position){
-     turretPID.setReference(position, ControlType.kPosition);
+   //derek
+   public void setTurretPosition(double position, double angular){
+     double spinFactor = createSmartDashboardNumber("Spin On Spot Factor", 1.3);
+     angular = angular * spinFactor; //rad/sec to percent output
+     turretPID.setReference(position, ControlType.kPosition, 0, angular, ArbFFUnits.kPercentOut); 
+     //turretPID.setReference(value, ctrl, pidSlot, arbFeedforward, arbFFUnits) //options are percent output or voltage
    }
 
    public void setTurretSpeed(double speed){
@@ -170,6 +175,19 @@ public class Shooter extends SubsystemBase {
    public boolean isReady(){
      return true;
    }
+
+   //derek, taken from chief delphi
+   public double createSmartDashboardNumber(String key, double defValue) {
+
+    // See if already on dashboard, and if so, fetch current value
+    double value = SmartDashboard.getNumber(key, defValue);
+  
+    // Make sure value is on dashboard, puts back current value if already set
+    // otherwise puts back default value
+    SmartDashboard.putNumber(key, value);
+  
+    return value;
+  }
 
   @Override
   public void periodic() {

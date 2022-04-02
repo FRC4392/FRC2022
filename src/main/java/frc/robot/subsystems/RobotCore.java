@@ -24,7 +24,8 @@ public class RobotCore extends SubsystemBase {
   public RobotCore() {
     pneumaticHub.enableCompressorAnalog(65, 110);
     powerDistribution.clearStickyFaults();
-
+    pneumaticHub.clearStickyFaults();
+    
     robotCanifier.setLEDOutput(1, LEDChannel.LEDChannelC);
     robotCanifier.setStatusFramePeriod(CANifierStatusFrame.Status_1_General, 255);
     robotCanifier.setStatusFramePeriod(CANifierStatusFrame.Status_2_General, 255);

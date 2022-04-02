@@ -22,13 +22,13 @@ public class SetTurretPositionCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mShooter.setTurretPosition(90);
+    mShooter.setTurretPosition(90, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    mShooter.setTurretPosition(-90);
+    mShooter.setTurretPosition(-90, 0);
   }
 
   // Returns true when the command should end.

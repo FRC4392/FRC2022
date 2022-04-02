@@ -28,8 +28,6 @@ public class Climber extends SubsystemBase {
     climber1.setIdleMode(IdleMode.kBrake);
     climber2.setIdleMode(IdleMode.kBrake);
 
-    
-
     climber1.burnFlash();
     climber2.burnFlash();
   }

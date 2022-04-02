@@ -20,13 +20,13 @@ public class ClimbCommand extends CommandBase {
     mShooter = shooter;
     mController = controller;
 
-    addRequirements(climber, shooter);
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mShooter.setTurretPosition(0);
+    mShooter.setTurretPosition(0,0);
     mShooter.setVelocity(0);
     mShooter.setHood(0);
   }
@@ -35,7 +35,7 @@ public class ClimbCommand extends CommandBase {
   @Override
   public void execute() {
     mClimber.setSpeed(mController.getLeftY());
-    if (mController.getAButton()){
+    if (mController.getRawButton(1)){
       mClimber.lower();
     } else {
       mClimber.lift(); 
@@ -45,7 +45,7 @@ public class ClimbCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    mClimber.lift();
+    //mClimber.lift();
     mClimber.stop();
   }
 

@@ -22,7 +22,7 @@ public class AutoEjectCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mShooter.setTurretPosition(0);
+    mShooter.setTurretPosition(0,0);
     mShooter.setHood(1);
   }
 

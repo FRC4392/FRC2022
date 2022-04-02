@@ -9,7 +9,9 @@ package frc.robot.commands;
 
 import org.deceivers.util.JoystickHelper;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -46,9 +48,17 @@ public class DriveCommand extends CommandBase {
 
     //slow down button
     if(mController.getRightBumper()){
-      driveFactor = 0.4;
+      driveFactor = 0.3;
     } else {
       driveFactor = 1.0;
+    }
+
+    if(DriverStation.isTeleop() && (DriverStation.getMatchTime() < 40.0) && (DriverStation.getMatchTime()>39)){
+      mController.setRumble(RumbleType.kLeftRumble, 1);
+      mController.setRumble(RumbleType.kRightRumble, 1);
+    } else {
+      mController.setRumble(RumbleType.kLeftRumble, 0);
+      mController.setRumble(RumbleType.kRightRumble, 0);
     }
 
     rotVel = mController.getRightX();
@@ -66,7 +76,8 @@ public class DriveCommand extends CommandBase {
     }
     lastScan = mController.getRawButton(7);
 
-    boolean fieldRelative = !mController.getRightBumper();
+    //boolean fieldRelative = !mController.getRightBumper();
+    boolean fieldRelative = true;
     mDrivetrain.drive(yVel, xVel, rotVel, fieldRelative);
 
     //mDrivetrain.setModulesAngle(xVel);
