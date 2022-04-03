@@ -25,8 +25,11 @@ public class DriveCommand extends CommandBase {
   private JoystickHelper yHelper = new JoystickHelper(0);
   private JoystickHelper rotHelper = new JoystickHelper(0);
   private double driveFactor = 1;
-  private SlewRateLimiter driveXLimiter = new SlewRateLimiter(1.0);
-  private SlewRateLimiter driveYLimiter = new SlewRateLimiter(1.0);
+
+  //top secret drive limiters (remove if you don't like them, I just wanted to see them in action)
+  private SlewRateLimiter driveXLimiter = new SlewRateLimiter(4.0);
+  private SlewRateLimiter driveYLimiter = new SlewRateLimiter(4.0);
+  private SlewRateLimiter rotateLimiter = new SlewRateLimiter(2.0);
 
   public DriveCommand(Drivetrain Drivetrain, XboxController XboxController) {
     mDrivetrain = Drivetrain;
@@ -39,7 +42,7 @@ public class DriveCommand extends CommandBase {
   @Override
   public void initialize() {
   }
-
+ 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -84,7 +87,7 @@ public class DriveCommand extends CommandBase {
     //boolean fieldRelative = !mController.getRightBumper();
     boolean fieldRelative = true;
 
-    mDrivetrain.drive(driveYLimiter.calculate(yVel), driveXLimiter.calculate(xVel), rotVel, fieldRelative);
+    mDrivetrain.drive(driveYLimiter.calculate(yVel), driveXLimiter.calculate(xVel), rotateLimiter.calculate(rotVel), fieldRelative);
 //  mDrivetrain.drive(yVel,xVel, rotVel, fieldRelative);
 
     //mDrivetrain.setModulesAngle(xVel);

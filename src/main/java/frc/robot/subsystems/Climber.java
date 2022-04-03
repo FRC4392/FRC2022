@@ -6,8 +6,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +17,7 @@ public class Climber extends SubsystemBase {
   private CANSparkMax climber1 = new CANSparkMax(41, MotorType.kBrushless);
   private CANSparkMax climber2 = new CANSparkMax(42, MotorType.kBrushless);
   private Solenoid pivot = new Solenoid(PneumaticsModuleType.REVPH, 1);
+
 
   /** Creates a new Climber. */
   public Climber() {
@@ -28,24 +29,41 @@ public class Climber extends SubsystemBase {
     climber1.setIdleMode(IdleMode.kBrake);
     climber2.setIdleMode(IdleMode.kBrake);
 
+     climber1.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+     climber1.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+     climber2.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+     climber2.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+
+    climber1.setSoftLimit(SoftLimitDirection.kForward, 0);
+    climber1.setSoftLimit(SoftLimitDirection.kReverse, -101);
+
+    climber2.setSoftLimit(SoftLimitDirection.kForward, 0);
+    climber2.setSoftLimit(SoftLimitDirection.kReverse, -101);
+    
+
     climber1.burnFlash();
     climber2.burnFlash();
   }
-  
   
   public void setSpeed(double speed) {
     climber1.set(speed);
     climber2.set(speed);
   }
+
   public void stop(){
     climber1.set(0);
     climber2.set(0);
 }
+
 public void lift(){
+  climber1.setSoftLimit(SoftLimitDirection.kReverse, -101);
+  climber2.setSoftLimit(SoftLimitDirection.kReverse, -101);
   pivot.set(false);
   }
 
 public void lower(){
+  climber1.setSoftLimit(SoftLimitDirection.kReverse, -131); //change max limit when we pivot
+  climber2.setSoftLimit(SoftLimitDirection.kReverse, -131); 
   pivot.set(true);
 }
   @Override

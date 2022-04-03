@@ -102,6 +102,9 @@ public class Drivetrain extends SubsystemBase {
       return pidgey.getFusedHeading();
     }
   
+    public double getYaw() {
+      return pidgey.getYaw();
+    }
     public void setStartPosition(){
       mSwerveDrive.setStartPostion();
     }
