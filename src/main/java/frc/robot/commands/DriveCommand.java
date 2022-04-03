@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import org.deceivers.util.JoystickHelper;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -23,7 +24,10 @@ public class DriveCommand extends CommandBase {
   private JoystickHelper xHelper = new JoystickHelper(0);
   private JoystickHelper yHelper = new JoystickHelper(0);
   private JoystickHelper rotHelper = new JoystickHelper(0);
-  double driveFactor = 1;
+  private double driveFactor = 1;
+  private SlewRateLimiter driveXLimiter = new SlewRateLimiter(1.0);
+  private SlewRateLimiter driveYLimiter = new SlewRateLimiter(1.0);
+
   public DriveCommand(Drivetrain Drivetrain, XboxController XboxController) {
     mDrivetrain = Drivetrain;
     mController = XboxController;
@@ -69,7 +73,8 @@ public class DriveCommand extends CommandBase {
     yVel = yVel*driveFactor;
     xVel = xVel*driveFactor;
     rotVel = rotVel*driveFactor;
-    rotVel = -rotVel;
+
+    rotVel = -rotVel; //controls were inverted
 
     if (mController.getRawButton(7) &! lastScan){
       mDrivetrain.resetGyro();
@@ -78,7 +83,9 @@ public class DriveCommand extends CommandBase {
 
     //boolean fieldRelative = !mController.getRightBumper();
     boolean fieldRelative = true;
-    mDrivetrain.drive(yVel, xVel, rotVel, fieldRelative);
+
+    mDrivetrain.drive(driveYLimiter.calculate(yVel), driveXLimiter.calculate(xVel), rotVel, fieldRelative);
+//  mDrivetrain.drive(yVel,xVel, rotVel, fieldRelative);
 
     //mDrivetrain.setModulesAngle(xVel);
   }

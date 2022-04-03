@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -57,7 +56,6 @@ public class RobotContainer {
   Conveyor conveyor = new Conveyor();
   Limelight limelight = new Limelight();
   SendableChooser<Double> autoChooser = new SendableChooser<>();
-  double currentTime = (2*60+30)*1000; //time of match in milliseconds
 
   //OI
   XboxController driverController = new XboxController(0);
@@ -116,11 +114,22 @@ public class RobotContainer {
       return (operatorController.getRightTriggerAxis() > 0) && !(operatorController.getLeftTriggerAxis() > 0);
     });
     
+    //for robot relative
     hintForwardButton.whileHeld(new HintTurretDirection(shooter, 0, driveTrain));
     hint45LeftButton.whileHeld(new HintTurretDirection(shooter, -45, driveTrain));
     hint45RightButton.whileHeld(new HintTurretDirection(shooter, 45, driveTrain));
     hintLeftButton.whileHeld(new HintTurretDirection(shooter, -90, driveTrain));
     hintRightButton.whileHeld(new HintTurretDirection(shooter, 90, driveTrain));
+
+
+/*
+    //for field relative (maybe)
+    hintForwardButton.whenPressed(new HintTurretDirection(shooter, 0, driveTrain));
+    hint45LeftButton.whenPressed(new HintTurretDirection(shooter, -45, driveTrain));
+    hint45RightButton.whenPressed(new HintTurretDirection(shooter, 45, driveTrain));
+    hintLeftButton.whenPressed(new HintTurretDirection(shooter, -90, driveTrain));
+    hintRightButton.whenPressed(new HintTurretDirection(shooter, 90, driveTrain));
+*/
 
     ClimbTrigger.whileActiveContinuous(new ClimbCommand(climber, shooter, operatorController));
 

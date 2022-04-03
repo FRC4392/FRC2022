@@ -48,37 +48,35 @@ double oldAdjustment = 0;
      ChassisSpeeds speeds = mDrivetrain.getSpeeds(); //gets the .toChassisSpeeds
 
      double rpmtoft = 20.0 / 4000.0; //guess and check number, higher numbers means the robot speeds affects the shot more, and vice versa
-     double turretFactor = 2.0; //turret angle guess and check number, higher numbers makes the adjusted turret angle larger
+     double turretFactor = 5.0; //turret angle guess and check number, higher numbers makes the adjusted turret angle larger
      
      rpmtoft = mShooter.createSmartDashboardNumber("RPM Factor", 12.3)/4000.0;
      turretFactor = mShooter.createSmartDashboardNumber("Turret Factor", 5.0);
 
-     double radtodeg = 180.0 / Math.PI;
-     double degtorad = 1.0 / radtodeg;
      double ftToM = 0.3048;
      double mToFt = 1.0 / ftToM;
 
-      //limelight distance and angle to hub
+     //limelight distance and angle to hub
       double limelightDistance = DistanceFilter.calculate(mLimelight.getDistanceToTarget().getAsDouble());
       double limeLightAngle = AngleFilter.calculate(mLimelight.getAngleOffset().getAsDouble());
       
       SmartDashboard.putNumber("Prev Vx",speeds.vxMetersPerSecond*mToFt);
-      SmartDashboard.putNumber("Prev Vx",speeds.vyMetersPerSecond*mToFt);
+      SmartDashboard.putNumber("Prev Vy",speeds.vyMetersPerSecond*mToFt);
 
       double angleToGoal = (limeLightAngle + mShooter.getAngle()); //- oldAdjustment;
-      SmartDashboard.putNumber("Angle To Goal",angleToGoal*radtodeg);
+      SmartDashboard.putNumber("Angle To Goal",Math.toDegrees(angleToGoal));
 
       //changes robot velocities to perpendicular and parallel velocities to the goal, matrix is written out because this isn't matlab
-      //either math is wrong or input angle is wrong
       
+      //doesn't work
       //speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, Rotation2d.fromDegrees(angleToGoal));
 
-     // speeds.vxMetersPerSecond = speeds.vxMetersPerSecond*Math.cos(-angleToGoal) - speeds.vyMetersPerSecond*Math.sin(-(angleToGoal)); //rotation matrix
-     // speeds.vyMetersPerSecond = speeds.vxMetersPerSecond*Math.sin(-angleToGoal) + speeds.vyMetersPerSecond*Math.cos(-(angleToGoal));
+      //also doesn't work, I'm just gonna assume I'm not doing the angle right
+     // speeds.vxMetersPerSecond = speeds.vxMetersPerSecond * Math.cos(-angleToGoal) - speeds.vyMetersPerSecond * Math.sin(-(angleToGoal)); //rotation matrix
+     // speeds.vyMetersPerSecond = speeds.vxMetersPerSecond * Math.sin(-angleToGoal) + speeds.vyMetersPerSecond * Math.cos(-(angleToGoal));
 
-     //adjust straight shot velocity by hood angle, angle goes from 20-45 degrees, math is a function that puts 45 degrees
-     // when getHoodPosition is at 1, 20 degrees when 0
-     rpmtoft = rpmtoft * Math.cos((mShooter.getHoodPositionForDistance(limelightDistance) * (-35) * degtorad) + ((70) * degtorad));
+     //adjust straight shot velocity by hood angle
+     rpmtoft = rpmtoft * Math.cos((mShooter.getHoodPositionForDistance(limelightDistance) * Math.toRadians(-35)) + Math.toRadians(70));
 
      //net robot velocity, angle, and shooter angular velocity converted to m/s
      double vnet = -Math.sqrt((speeds.vxMetersPerSecond*speeds.vxMetersPerSecond)+(speeds.vyMetersPerSecond*speeds.vyMetersPerSecond));
@@ -93,15 +91,17 @@ double oldAdjustment = 0;
      if(speeds.vyMetersPerSecond > 0.0 ){
        adjustment = -adjustment;
      }
+     
+     //here for later usage
      oldAdjustment = adjustment;
 
-     double targetAngle = limeLightAngle + mShooter.getAngle() + ((adjustment*radtodeg) * turretFactor);// + speeds.omegaRadiansPerSecond * timeInterval;
+     double targetAngle = limeLightAngle + mShooter.getAngle() + (Math.toRadians(adjustment) * turretFactor);
      
      //Set Shooter Values, 
       mShooter.setHood(mShooter.getHoodPositionForDistance(mShooter.getDistanceFromShooterVelocity(vdesired * (1.0/rpmtoft) * mToFt)));
       mShooter.setPIDVelocity(vdesired * (1.0/rpmtoft) * mToFt);
 
-      if (Math.abs(targetAngle) > 100.0){
+      if (Math.abs(targetAngle) > 95.0){
         targetAngle = 0;
       }
       mShooter.setTurretPosition(targetAngle, speeds.omegaRadiansPerSecond); 
@@ -109,7 +109,7 @@ double oldAdjustment = 0;
       SmartDashboard.putNumber("rpmtoft",rpmtoft);
 
       SmartDashboard.putNumber("MoveShotPower", vdesired * rpmtoft * mToFt);
-      SmartDashboard.putNumber("MoveAdjustment", (adjustment * radtodeg) * turretFactor);
+      SmartDashboard.putNumber("MoveAdjustment", (Math.toDegrees(adjustment)) * turretFactor);
       SmartDashboard.putNumber("Vx",speeds.vxMetersPerSecond * mToFt);
       SmartDashboard.putNumber("Vy",speeds.vyMetersPerSecond * mToFt);
       SmartDashboard.putNumber("vNet",vnet * mToFt);

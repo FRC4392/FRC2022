@@ -28,11 +28,14 @@ public class HintTurretDirection extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mPosition = mPosition + mDrivetrain.getRotation();
+    //Field Relative   
+   /* mPosition = mPosition + mDrivetrain.getRotation();
     if (Math.abs(mPosition) > 95)
     {
       mPosition = 0;
     }
+    */
+
     mShooter.setTurretPosition(mPosition , 0);
   }
 
