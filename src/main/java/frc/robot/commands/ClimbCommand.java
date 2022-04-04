@@ -14,6 +14,7 @@ public class ClimbCommand extends CommandBase {
   Climber mClimber;
   Shooter mShooter;
   XboxController mController;
+
   public ClimbCommand(Climber climber, Shooter shooter, XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     mClimber = climber;
@@ -34,7 +35,12 @@ public class ClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+  if(Math.abs(mController.getLeftY()) > 0.08){
     mClimber.setSpeed(mController.getLeftY());
+  } else{
+    mClimber.setSpeed(0);
+  }
+
     if (mController.getRawButton(1)){
       mClimber.lower();
     } else {

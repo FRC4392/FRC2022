@@ -8,6 +8,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +19,7 @@ public class Climber extends SubsystemBase {
   private CANSparkMax climber1 = new CANSparkMax(41, MotorType.kBrushless);
   private CANSparkMax climber2 = new CANSparkMax(42, MotorType.kBrushless);
   private Solenoid pivot = new Solenoid(PneumaticsModuleType.REVPH, 1);
+  private DigitalInput toplimitSwitch = new DigitalInput(2);
 
 
   /** Creates a new Climber. */
@@ -29,15 +32,10 @@ public class Climber extends SubsystemBase {
     climber1.setIdleMode(IdleMode.kBrake);
     climber2.setIdleMode(IdleMode.kBrake);
 
-     climber1.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
      climber1.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-     climber2.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
      climber2.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
-    climber1.setSoftLimit(SoftLimitDirection.kForward, 0);
     climber1.setSoftLimit(SoftLimitDirection.kReverse, -101);
-
-    climber2.setSoftLimit(SoftLimitDirection.kForward, 0);
     climber2.setSoftLimit(SoftLimitDirection.kReverse, -101);
     
 
@@ -48,6 +46,12 @@ public class Climber extends SubsystemBase {
   public void setSpeed(double speed) {
     climber1.set(speed);
     climber2.set(speed);
+    if(!(toplimitSwitch.get())){
+      if(speed>0){
+      climber1.set(0);
+      climber2.set(0);
+      }
+    }
   }
 
   public void stop(){
