@@ -61,23 +61,18 @@ double oldAdjustment = 0;
      //limelight distance and angle to hub
       double limelightDistance = DistanceFilter.calculate(mLimelight.getDistanceToTarget().getAsDouble());
       double limeLightAngle = AngleFilter.calculate(mLimelight.getAngleOffset().getAsDouble());
-      
-      SmartDashboard.putNumber("Prev Vx",speeds.vxMetersPerSecond * mToFt);
-      SmartDashboard.putNumber("Prev Vy",speeds.vyMetersPerSecond * mToFt);
 
       double angleToGoal = (limeLightAngle + mShooter.getAngle()); //- oldAdjustment;
       SmartDashboard.putNumber("Angle To Goal",angleToGoal);
 
-       Translation2d translation2d = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
-       translation2d.rotateBy(Rotation2d.fromDegrees(angleToGoal));
-
-      // speeds.vxMetersPerSecond = translation2d.getX();
-      // speeds.vyMetersPerSecond = translation2d.getY();
       //changes robot velocities to perpendicular and parallel velocities to the goal, matrix is written out because this isn't matlab
-   
-      speeds.vxMetersPerSecond = (speeds.vxMetersPerSecond * Math.cos(Math.toRadians(angleToGoal))) - (speeds.vyMetersPerSecond * Math.sin(Math.toRadians(angleToGoal))); //rotation matrix
-      speeds.vyMetersPerSecond = (speeds.vxMetersPerSecond * Math.sin(Math.toRadians(angleToGoal))) + (speeds.vyMetersPerSecond * Math.cos(Math.toRadians(angleToGoal)));
+      double prevVx = speeds.vxMetersPerSecond;
+      double prevVy = speeds.vyMetersPerSecond;
+      SmartDashboard.putNumber("Prev Vx",prevVx * mToFt);
+      SmartDashboard.putNumber("Prev Vy",prevVy * mToFt);
 
+      speeds.vxMetersPerSecond = (prevVx * Math.cos(Math.toRadians(angleToGoal))) - (prevVy * Math.sin(Math.toRadians(angleToGoal))); //rotation matrix
+      speeds.vyMetersPerSecond = (prevVx * Math.sin(Math.toRadians(angleToGoal))) + (prevVy * Math.cos(Math.toRadians(angleToGoal)));
       SmartDashboard.putNumber("Vx",speeds.vxMetersPerSecond * mToFt);
       SmartDashboard.putNumber("Vy",speeds.vyMetersPerSecond * mToFt);
 
