@@ -96,7 +96,7 @@ double oldAdjustment = 0;
      double targetAngle = limeLightAngle + mShooter.getAngle() + (Math.toDegrees(adjustment) * turretFactor);
      
      //Set Shooter Values, 
-      mShooter.setHood(mShooter.getHoodPositionForDistance(mShooter.getDistanceFromShooterVelocity(vdesired * (1.0/rpmtoft) * mToFt)));
+      mShooter.setHood(mShooter.getHoodPositionForDistance(limelightDistance));
       mShooter.setPIDVelocity(vdesired * (1.0/rpmtoft) * mToFt);
 
       if (Math.abs(targetAngle) > 115.0){

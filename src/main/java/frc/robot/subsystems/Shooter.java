@@ -42,17 +42,19 @@ public class Shooter extends SubsystemBase {
   private CANCoder cancoder = new CANCoder(56);
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> hoodMap = new InterpolatingTreeMap<>();
   static {
-    hoodMap.put(new InterpolatingDouble(62.0), new InterpolatingDouble(.1));
-    hoodMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(.25));
-    hoodMap.put(new InterpolatingDouble(407.0), new InterpolatingDouble(1.0));
+    hoodMap.put(new InterpolatingDouble(63.5), new InterpolatingDouble(0.1));
+    hoodMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(0.5));
+    hoodMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(0.7));
+    hoodMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(0.85));
+    hoodMap.put(new InterpolatingDouble(368.5), new InterpolatingDouble(1.0));
   }
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> speedMap = new InterpolatingTreeMap<>();
   static {
-    speedMap.put(new InterpolatingDouble(62.0), new InterpolatingDouble(2000.0));
-    speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(2500.0));
-    speedMap.put(new InterpolatingDouble(150.0), new InterpolatingDouble(2800.0));
-    speedMap.put(new InterpolatingDouble(240.0), new InterpolatingDouble(3000.0));
-    speedMap.put(new InterpolatingDouble(407.0), new InterpolatingDouble(3420.0));
+    speedMap.put(new InterpolatingDouble(67.8), new InterpolatingDouble(1900.0));
+    speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(1950.0));
+    speedMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(2200.0));
+    speedMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(2450.0));
+    speedMap.put(new InterpolatingDouble(368.0), new InterpolatingDouble(3000.0));
   }
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> distanceMap = new InterpolatingTreeMap<>();
   static {
@@ -103,7 +105,7 @@ public class Shooter extends SubsystemBase {
     turretEncoder = turret.getEncoder();
     turretEncoder.setPositionConversionFactor(360.0/112.0);
     turretPID = turret.getPIDController();
-    turretPID.setP(0.01);
+    turretPID.setP(0.02);
     turretPID.setOutputRange(-.5, .5);
 
     turretEncoder.setPosition(cancoder.getPosition());

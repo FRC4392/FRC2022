@@ -45,7 +45,10 @@ public class SwerveDrive {
 
         mKinematics = new SwerveDriveKinematics(moduleLocations);
 
-        mDriveController = new HolonomicDriveController(new PIDController(4,0,0), new PIDController(4,0,0), new ProfiledPIDController(2,.1,.1,new TrapezoidProfile.Constraints(6.28, 3.14)));
+        ProfiledPIDController rotationPIDController = new ProfiledPIDController(2,.1,.1,new TrapezoidProfile.Constraints(6.28, 3.14));
+        rotationPIDController.enableContinuousInput(-180, 180);
+
+        mDriveController = new HolonomicDriveController(new PIDController(4,0,0), new PIDController(4,0,0), rotationPIDController);
         mSwerveDriveOdometry = new SwerveDriveOdometry(mKinematics, Rotation2d.fromDegrees(mGyroAngle.getAsDouble()));
 
         Arrays.stream(mModules).forEach(SwerveModule::init);

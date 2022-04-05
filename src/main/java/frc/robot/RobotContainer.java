@@ -88,9 +88,11 @@ public class RobotContainer {
     POVButton hintLeftButton = new POVButton(operatorController, 270);
     POVButton hintRightButton = new POVButton(operatorController, 90);
 
-    Trigger ClimbTrigger = new Trigger(() -> {
-      return (operatorController.getLeftTriggerAxis() > 0) && (operatorController.getRightTriggerAxis()>0);
-    });
+    // Trigger ClimbTrigger = new Trigger(() -> {
+    //   return (operatorController.getLeftTriggerAxis() > 0) && (operatorController.getRightTriggerAxis()>0);
+    // });
+
+    JoystickButton ClimbTrigger = new JoystickButton(operatorController, XboxController.Button.kLeftStick.value);
 
     //trigger for reverse tower Left trigger (done)
     Trigger reverseTowerTrigger = new Trigger(() -> {
@@ -131,7 +133,7 @@ public class RobotContainer {
     hintRightButton.whenPressed(new HintTurretDirection(shooter, 90, driveTrain));
 */
 
-    ClimbTrigger.whileActiveContinuous(new ClimbCommand(climber, shooter, operatorController));
+    ClimbTrigger.whileHeld(new ClimbCommand(climber, shooter, operatorController));
 
     reverseTowerTrigger.whileActiveContinuous(new ReverseTowerCommand(sequencer));
     manualMoveButton.whenPressed(new ManualMoveTurretCommand(shooter, operatorController));
