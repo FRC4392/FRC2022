@@ -45,7 +45,7 @@ public class SwerveDrive {
 
         mKinematics = new SwerveDriveKinematics(moduleLocations);
 
-        mDriveController = new HolonomicDriveController(new PIDController(4,0,0), new PIDController(4,0,0), new ProfiledPIDController(2,.1,.1,new TrapezoidProfile.Constraints(6.28, 3.14)));
+        mDriveController = new HolonomicDriveController(new PIDController(4,0,0), new PIDController(4,0,0), new ProfiledPIDController(5,0,0,new TrapezoidProfile.Constraints(6.28, 3.14)));
         mSwerveDriveOdometry = new SwerveDriveOdometry(mKinematics, Rotation2d.fromDegrees(mGyroAngle.getAsDouble()));
 
         Arrays.stream(mModules).forEach(SwerveModule::init);
@@ -134,7 +134,7 @@ public class SwerveDrive {
 
         ChassisSpeeds speeds = mDriveController.calculate(getPosition(), goal, Rotation2d.fromDegrees(goal.holonomicRotation.getDegrees()));
 
-        driveClosedLoop(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, -speeds.omegaRadiansPerSecond, false);
+        driveClosedLoop(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
         SmartDashboard.putNumber("goalx", goal.poseMeters.getX());
         SmartDashboard.putNumber("xerror", goal.poseMeters.getX() - getPosition().getX());
         SmartDashboard.putNumber("goaly", goal.poseMeters.getY());
@@ -151,6 +151,7 @@ public class SwerveDrive {
         SmartDashboard.putNumber("SwerveYLocation", pose.getY());
         SmartDashboard.putNumber("SwerveRotation", pose.getRotation().getDegrees());
         SmartDashboard.putNumber("GyroAngle", mGyroAngle.getAsDouble());
+        SmartDashboard.putNumber("poseRotation", pose.getRotation().getDegrees());
     }
 
     public void setLocation(double x, double y, double angle){
