@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
-
+import com.pathplanner.lib.PathPlannerTrajectory;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -69,8 +69,8 @@ public class Drivetrain extends SubsystemBase {
       mSwerveDrive.stop();
     }
   
-    public void followPath(double initTime){
-      mSwerveDrive.followPath(initTime);
+    public void followPath(double initTime, PathPlannerTrajectory pptrajectory){
+      mSwerveDrive.followPath(initTime, pptrajectory);
     }
   
     @Override

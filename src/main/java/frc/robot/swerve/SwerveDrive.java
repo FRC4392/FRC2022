@@ -18,6 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+
 public class SwerveDrive {
     private final SwerveModule[] mModules;
     private final int numModules;
@@ -125,10 +128,11 @@ public class SwerveDrive {
         return(chassisSpeeds);
     }
 
-    public void followPath(double startTime){
-        Trajectory.State goal = trajectory.sample(Timer.getFPGATimestamp() - startTime);
+    public void followPath(double startTime, PathPlannerTrajectory pptrajectory){
+        PathPlannerState goal = (PathPlannerState) pptrajectory.sample(Timer.getFPGATimestamp() - startTime);
+        
 
-        ChassisSpeeds speeds = mDriveController.calculate(getPosition(), goal, new Rotation2d());
+        ChassisSpeeds speeds = mDriveController.calculate(getPosition(), goal, Rotation2d.fromDegrees(goal.holonomicRotation.getDegrees()));
 
         driveClosedLoop(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, -speeds.omegaRadiansPerSecond, false);
         SmartDashboard.putNumber("goalx", goal.poseMeters.getX());
