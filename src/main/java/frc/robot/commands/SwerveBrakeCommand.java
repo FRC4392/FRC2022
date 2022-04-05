@@ -24,7 +24,7 @@ public class SwerveBrakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angle = -45;
+    double angle = 45;
     for (int i = 0; i < 4; i++) {
       mDrivetrain.setModulesAngle(angle, i);
       angle += 90;

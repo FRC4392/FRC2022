@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,6 +21,7 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DumbAutoDrive;
 import frc.robot.commands.FeedWhenReadyCommand;
 import frc.robot.commands.FixedShotCommand;
+import frc.robot.commands.FollowPathPlannerPath;
 import frc.robot.commands.HintTurretDirection;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ManualMoveTurretCommand;
@@ -174,8 +178,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    double startPosition = autoChooser.getSelected().doubleValue();
-    ParallelCommandGroup shootandfeed = new ParallelCommandGroup(new AutoShootCommand(shooter, limelight, driverController, driveTrain), new AutoFeedCommand(sequencer));
-    return new SequentialCommandGroup(new DumbAutoDrive(driveTrain, startPosition, intake), shootandfeed);
+    return new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 1, 1), true, driveTrain);
+    // double startPosition = autoChooser.getSelected().doubleValue();
+    // ParallelCommandGroup shootandfeed = new ParallelCommandGroup(new AutoShootCommand(shooter, limelight, driverController, driveTrain), new AutoFeedCommand(sequencer));
+    // return new SequentialCommandGroup(new DumbAutoDrive(driveTrain, startPosition, intake), shootandfeed);
   }
 }
