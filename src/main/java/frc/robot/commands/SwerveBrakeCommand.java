@@ -12,6 +12,7 @@ public class SwerveBrakeCommand extends CommandBase {
   /** Creates a new SwerveBrakeCommand. */
   public SwerveBrakeCommand(Drivetrain drivetrain) {
     mDrivetrain = drivetrain;
+
     addRequirements(mDrivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -22,7 +23,13 @@ public class SwerveBrakeCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    double angle = -45;
+    for (int i = 0; i < 4; i++) {
+      mDrivetrain.setModulesAngle(angle, i);
+      angle += 90;
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
