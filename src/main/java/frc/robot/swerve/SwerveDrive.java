@@ -162,10 +162,8 @@ public class SwerveDrive {
         //mSwerveDriveOdometry.resetPosition(trajectory.getInitialPose(), Rotation2d.fromDegrees(0));
     }
 
-    public void setModulesAngle(double angle){
-        for (SwerveModule swerveModule : mModules) {
-            swerveModule.setAngle(angle);
-        }
+    public void setModulesAngle(double angle, int module){
+        mModules[module].setAngle(angle);
     }
 
 

@@ -109,7 +109,7 @@ public class Drivetrain extends SubsystemBase {
       mSwerveDrive.setStartPostion();
     }
 
-    public void setModulesAngle(double angle){
-      mSwerveDrive.setModulesAngle(angle);
+    public void setModulesAngle(double angle, int module){
+      mSwerveDrive.setModulesAngle(angle, module);
     }
 }
