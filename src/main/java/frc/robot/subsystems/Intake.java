@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   public Intake() {
 
-    intake.setSmartCurrentLimit(20, 40, 5700);
+    intake.setSmartCurrentLimit(40, 40, 5700);
     intake.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 65535);
     intake.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 65535);
     intake.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 65535);

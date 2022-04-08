@@ -13,10 +13,12 @@ import frc.robot.subsystems.Shooter;
 public class FixedShotCommand extends CommandBase {
   Shooter mShooter;
   double mVelocity;
-  public FixedShotCommand(Shooter shooter, double velocity) {
+  double mHoodAngle;
+  public FixedShotCommand(Shooter shooter, double velocity, double hoodAngle) {
     // Use addRequirements() here to declare subsystem dependencies.
     mShooter = shooter;
     mVelocity = velocity;
+    mHoodAngle = hoodAngle;
 
     addRequirements(shooter);
   }
@@ -29,12 +31,14 @@ public class FixedShotCommand extends CommandBase {
     @Override
     public void execute() {
       mShooter.setPIDVelocity(mVelocity);
+      mShooter.setHood(mHoodAngle);
     }
   
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
       mShooter.setVelocity(0);
+      mShooter.setHood(0);
     }
   
     // Returns true when the command should end.

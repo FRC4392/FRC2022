@@ -36,7 +36,9 @@ public class Drivetrain extends SubsystemBase {
     private final SwerveModuleV3 Module3 = new SwerveModuleV3(mAzimuth3, mDriveMotor3, new Translation2d(-0.259999988, -0.2346), 5, 0.002707, "Module 3");
     private final SwerveModuleV3 Module4 = new SwerveModuleV3(mAzimuth4, mDriveMotor4, new Translation2d(-0.259999988,  0.2346), 6, 0.002641, "Module 4");
 
-    private final SwerveDrive mSwerveDrive = new SwerveDrive(pidgey::getFusedHeading, Module1, Module2, Module3, Module4);
+    private final SwerveDrive mSwerveDrive = new SwerveDrive(this::getRotation, Module1, Module2, Module3, Module4);
+
+    private double gyroOffset = 0;
 
   public Drivetrain() {
     pidgey.setFusedHeading(0);
@@ -91,15 +93,15 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void resetGyro(){
-      pidgey.setFusedHeading(0);
+      setGyro(0);
     }
 
     public void setGyro(double position){
-      pidgey.setFusedHeading(position);
+      gyroOffset = (position - pidgey.getFusedHeading());
     }
   
     public double getRotation() {
-      return pidgey.getFusedHeading();
+      return pidgey.getFusedHeading() + gyroOffset;
     }
   
     public double getYaw() {

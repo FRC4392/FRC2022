@@ -66,8 +66,8 @@ public void lift(){
   }
 
 public void lower(){
-  climber1.setSoftLimit(SoftLimitDirection.kReverse, -131); //change max limit when we pivot
-  climber2.setSoftLimit(SoftLimitDirection.kReverse, -131); 
+  climber1.setSoftLimit(SoftLimitDirection.kReverse, -150); //change max limit when we pivot
+  climber2.setSoftLimit(SoftLimitDirection.kReverse, -150); 
   pivot.set(true);
 }
   @Override

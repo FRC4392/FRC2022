@@ -5,21 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.Sequencer;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Intake;
 
-public class FeedWhenReadyCommand extends CommandBase {
-  private Sequencer mSequencer;
-  private Shooter mShooter;
-  private Conveyor conveyor;
-  /** Creates a new FeedWhenReadyCommand. */
-  public FeedWhenReadyCommand(Sequencer sequencer, Shooter shooter, Conveyor conveyor) {
-    mSequencer = sequencer;
-    mShooter = shooter;
-    this.conveyor = conveyor;
-    addRequirements(mSequencer, conveyor);
+public class IntakeCommand2 extends CommandBase {
+  private final Intake mIntake;
+  private final boolean liftAtEnd;
+
+  /** Creates a new Intake. */
+  public IntakeCommand2(Intake intake, boolean liftAtEnd) {
     // Use addRequirements() here to declare subsystem dependencies.
+    mIntake = intake;
+    this.liftAtEnd = liftAtEnd;
+
+    addRequirements(mIntake);
   }
 
   // Called when the command is initially scheduled.
@@ -29,18 +27,17 @@ public class FeedWhenReadyCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (mShooter.isReady()){
-      conveyor.setSpeed(1);
-      mSequencer.feed();
-    } else{
-      mSequencer.stop();
-      conveyor.setSpeed(.5);
-    }
+    mIntake.lower();
+    mIntake.intake();
   }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    mSequencer.stop();
+    if (liftAtEnd){
+      mIntake.lift();
+    }
+    mIntake.stop();
   }
 
   // Returns true when the command should end.

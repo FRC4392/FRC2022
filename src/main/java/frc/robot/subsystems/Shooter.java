@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase {
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> hoodMap = new InterpolatingTreeMap<>();
   static {
     hoodMap.put(new InterpolatingDouble(63.5), new InterpolatingDouble(0.1));
-    hoodMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(0.5));
+    hoodMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(0.4));
     hoodMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(0.7));
     hoodMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(0.85));
     hoodMap.put(new InterpolatingDouble(368.5), new InterpolatingDouble(1.0));
@@ -51,8 +51,8 @@ public class Shooter extends SubsystemBase {
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> speedMap = new InterpolatingTreeMap<>();
   static {
     speedMap.put(new InterpolatingDouble(67.8), new InterpolatingDouble(1900.0));
-    speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(1950.0));
-    speedMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(2200.0));
+    speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(2000.0));
+    speedMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(2100.0)); //2200
     speedMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(2450.0));
     speedMap.put(new InterpolatingDouble(368.0), new InterpolatingDouble(3000.0));
   }

@@ -13,12 +13,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DumbAutoDrive;
+import frc.robot.commands.FeedShooter;
 import frc.robot.commands.FeedWhenReadyCommand;
 import frc.robot.commands.FixedShotCommand;
 import frc.robot.commands.FollowPathPlannerPath;
@@ -29,6 +31,7 @@ import frc.robot.commands.ReverseTowerCommand;
 import frc.robot.commands.SwerveBrakeCommand;
 import frc.robot.commands.AutoEjectCommand;
 import frc.robot.commands.AutoFeedCommand;
+import frc.robot.commands.AutoFeedShooter;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DefaultConveyor;
@@ -142,10 +145,10 @@ public class RobotContainer {
     reverseTowerTrigger.whileActiveContinuous(new ReverseTowerCommand(sequencer));
     manualMoveButton.whenPressed(new ManualMoveTurretCommand(shooter, operatorController));
 
-    fixedShotOneButton.whileHeld(new FixedShotCommand(shooter, 500));
-    fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 400));
-    fixedShotThreeButton.whileHeld(new FixedShotCommand(shooter, 300));
-    fixedShotFourButton.whileHeld(new FixedShotCommand(shooter, 200));
+    fixedShotOneButton.whileHeld(new FixedShotCommand(shooter, 2200, .5));
+    fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 400, 1));
+    fixedShotThreeButton.whileHeld(new FixedShotCommand(shooter, 300, 1));
+    fixedShotFourButton.whileHeld(new FixedShotCommand(shooter, 6000, 1));
     
     brakeButton.whileActiveContinuous(new SwerveBrakeCommand(driveTrain));
     autoEjectTrigger.whileActiveContinuous(new AutoEjectCommand(sequencer, shooter));
@@ -161,7 +164,7 @@ public class RobotContainer {
 
     intakeButton.toggleWhenActive(new IntakeCommand(intake, conveyor));
 
-    shootButton.whileHeld(new AutoShootCommand(shooter, limelight, driverController, driveTrain));
+    shootButton.whileHeld(new AutoShootCommand(shooter, limelight, driveTrain));
 
     feedButton.whileHeld(new FeedWhenReadyCommand(sequencer, shooter));
 
@@ -178,7 +181,29 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 1, 1), true, driveTrain);
+    return new SequentialCommandGroup(
+      new ParallelDeadlineGroup(
+        new AutoShootCommand(shooter, limelight, driveTrain).withTimeout(2),
+        new AutoFeedShooter(sequencer, conveyor)
+        ),
+      new ParallelDeadlineGroup(
+        new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 1, 1), true, driveTrain), 
+        new IntakeCommand(intake, conveyor)
+        ),
+      new ParallelDeadlineGroup(
+        new AutoShootCommand(shooter, limelight, driveTrain).withTimeout(2),
+        new AutoFeedShooter(sequencer, conveyor)
+        ),
+      new ParallelDeadlineGroup(
+        new FollowPathPlannerPath(PathPlanner.loadPath("New New Path", 1, 1), false, driveTrain),
+        new IntakeCommand(intake, conveyor)
+        ),
+      new ParallelCommandGroup(
+        new IntakeCommand(intake, conveyor),
+        new AutoShootCommand(shooter, limelight, driveTrain),
+        new AutoFeedShooter(sequencer, conveyor)
+        )
+    );
     // double startPosition = autoChooser.getSelected().doubleValue();
     // ParallelCommandGroup shootandfeed = new ParallelCommandGroup(new AutoShootCommand(shooter, limelight, driverController, driveTrain), new AutoFeedCommand(sequencer));
     // return new SequentialCommandGroup(new DumbAutoDrive(driveTrain, startPosition, intake), shootandfeed);

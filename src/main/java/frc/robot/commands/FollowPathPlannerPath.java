@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -15,6 +16,7 @@ public class FollowPathPlannerPath extends CommandBase {
   Drivetrain drivetrain;
   boolean initPosition;
   PathPlannerTrajectory trajectory;
+  Timer timer = new Timer();
   double initTime;
   /** Creates a new FollowPathPlannerPath. */
   public FollowPathPlannerPath(PathPlannerTrajectory trajectory, boolean initPosition, Drivetrain drivetrain) {
@@ -30,11 +32,16 @@ public class FollowPathPlannerPath extends CommandBase {
   @Override
   public void initialize() {
     if (initPosition){
+      
       PathPlannerState initialState = trajectory.getInitialState();
+      drivetrain.setGyro(initialState.holonomicRotation.getDegrees());
+      SmartDashboard.putNumber("AutoGyroValue", drivetrain.getRotation());
       drivetrain.setLocation(initialState.poseMeters.getX(), initialState.poseMeters.getY(), initialState.holonomicRotation.getDegrees());
     }
 
-    initTime = Timer.getFPGATimestamp();
+    timer.reset();
+    timer.start();
+    initTime = timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,11 +52,14 @@ public class FollowPathPlannerPath extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    timer.stop();
+    drivetrain.stop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.get() > trajectory.getTotalTimeSeconds();
   }
 }

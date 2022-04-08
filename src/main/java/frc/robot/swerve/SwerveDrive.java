@@ -10,7 +10,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +27,7 @@ public class SwerveDrive {
     private final SwerveDriveOdometry mSwerveDriveOdometry;
     private final HolonomicDriveController mDriveController;
     private final DoubleSupplier mGyroAngle;
-    private Trajectory trajectory = new Trajectory();
+    private ProfiledPIDController rotationPIDController = new ProfiledPIDController(10,.1,.1,new TrapezoidProfile.Constraints(8, 2));
 
     //move gyro out of this class?
 
@@ -45,34 +44,13 @@ public class SwerveDrive {
 
         mKinematics = new SwerveDriveKinematics(moduleLocations);
 
-        ProfiledPIDController rotationPIDController = new ProfiledPIDController(2,.1,.1,new TrapezoidProfile.Constraints(6.28, 3.14));
-        rotationPIDController.enableContinuousInput(-180, 180);
+        rotationPIDController.enableContinuousInput(-180.0, 180.0);
 
         mDriveController = new HolonomicDriveController(new PIDController(4,0,0), new PIDController(4,0,0), rotationPIDController);
         mSwerveDriveOdometry = new SwerveDriveOdometry(mKinematics, Rotation2d.fromDegrees(mGyroAngle.getAsDouble()));
 
         Arrays.stream(mModules).forEach(SwerveModule::init);
         Arrays.stream(mModules).forEach(SwerveModule::init);
-
-//        TrajectoryConfig config = new TrajectoryConfig(2.5, 1);
-//        config.setKinematics(mKinematics);
-//        //config.setReversed(true);
-//        config.addConstraint(new SwerveDriveKinematicsConstraint(mKinematics, 3));
-//        List<Translation2d> midpoints = new ArrayList<>();
-//
-//        midpoints.add(new Translation2d(2.0, 2.0));
-//        midpoints.add(new Translation2d(4.0, -2.0));
-//        midpoints.add(new Translation2d(6.0, 0.0));
-        
-        //trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(), midpoints, new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(180)), config);
-
-        // try {
-        //     trajectory = TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("output/Bounce.wpilib.json"));
-        // } catch (Exception e){
-        //     DriverStation.reportError("Unable to open trajectory: " + "Slalom.wpilib.json", e.getStackTrace());
-
-        // }
-
     }
 
 	public void stop() {
@@ -82,7 +60,7 @@ public class SwerveDrive {
     public void drive(double forward, double strafe, double azimuth, boolean fieldRelative){
         ChassisSpeeds speeds;
         if (fieldRelative){
-            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forward, strafe, azimuth, Rotation2d.fromDegrees(mGyroAngle.getAsDouble()));
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forward, strafe, azimuth, Rotation2d.fromDegrees(mGyroAngle.getAsDouble()-180));
         } else {
             speeds = new ChassisSpeeds(forward, strafe, azimuth);
         }
@@ -142,9 +120,13 @@ public class SwerveDrive {
         SmartDashboard.putNumber("xerror", goal.poseMeters.getX() - getPosition().getX());
         SmartDashboard.putNumber("goaly", goal.poseMeters.getY());
         SmartDashboard.putNumber("yerror", goal.poseMeters.getY() - getPosition().getY());
-        SmartDashboard.putNumber("goalrot", goal.poseMeters.getRotation().getDegrees());
+        SmartDashboard.putNumber("goalrot", goal.holonomicRotation.getDegrees());
+        SmartDashboard.putNumber("roterror", goal.holonomicRotation.getDegrees() - getPosition().getRotation().getDegrees());
         SmartDashboard.putNumber("xVel", speeds.vxMetersPerSecond);
         SmartDashboard.putNumber("yVel", speeds.vyMetersPerSecond);
+        SmartDashboard.putNumber("rotationPIDsetpoint", rotationPIDController.getSetpoint().position);
+        SmartDashboard.putNumber("rotationPIDgoal", rotationPIDController.getGoal().position);
+        SmartDashboard.putNumber("rotationPIDerror", rotationPIDController.getPositionError());
     }
 
     public void log(){
@@ -159,7 +141,8 @@ public class SwerveDrive {
 
     public void setLocation(double x, double y, double angle){
         Pose2d newPose = new Pose2d(x, y, Rotation2d.fromDegrees(angle));
-        mSwerveDriveOdometry.resetPosition(newPose, Rotation2d.fromDegrees(angle));
+        mSwerveDriveOdometry.resetPosition(newPose, Rotation2d.fromDegrees(mGyroAngle.getAsDouble()));
+        rotationPIDController.reset(angle);
     }
 
     public void setStartPostion(){

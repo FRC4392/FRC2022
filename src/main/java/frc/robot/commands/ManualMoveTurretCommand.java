@@ -26,7 +26,11 @@ public class ManualMoveTurretCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mShooter.setTurretSpeed(mXboxController.getRightX());
+    if(Math.abs(mXboxController.getRightX()) > 0.1){
+      mShooter.setTurretSpeed(mXboxController.getRightX());
+    } else {
+      mShooter.setTurretSpeed(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
