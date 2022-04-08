@@ -12,38 +12,16 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.DumbAutoDrive;
-import frc.robot.commands.FeedShooter;
-import frc.robot.commands.FeedWhenReadyCommand;
-import frc.robot.commands.FixedShotCommand;
-import frc.robot.commands.FollowPathPlannerPath;
-import frc.robot.commands.HintTurretDirection;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ManualMoveTurretCommand;
-import frc.robot.commands.ReverseTowerCommand;
-import frc.robot.commands.SwerveBrakeCommand;
-import frc.robot.commands.AutoEjectCommand;
-import frc.robot.commands.AutoFeedCommand;
-import frc.robot.commands.AutoFeedShooter;
-import frc.robot.commands.AutoShootCommand;
-import frc.robot.commands.ClimbCommand;
-import frc.robot.commands.DefaultConveyor;
-import frc.robot.commands.indexCommand;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.RobotCore;
-import frc.robot.subsystems.Sequencer;
-import frc.robot.subsystems.Shooter;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.Limelight.LedMode;
 
 /**
@@ -75,8 +53,9 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     limelight.setLEDMode(LedMode.kOff);
-    autoChooser.addOption("Left", Double.valueOf(135));
-    autoChooser.setDefaultOption("Right", Double.valueOf(-156));
+    autoChooser.addOption("5 Ball", Double.valueOf(1));
+    autoChooser.setDefaultOption("2 Ball", Double.valueOf(1));
+    autoChooser.addOption("Do Nothing", Double.valueOf(-1));
     SmartDashboard.putData(autoChooser);
   }
 
@@ -162,11 +141,11 @@ public class RobotContainer {
     JoystickButton feedButton = new JoystickButton(operatorController, 5);
  
 
-    intakeButton.toggleWhenActive(new IntakeCommand(intake, conveyor));
+    intakeButton.toggleWhenActive(new IntakeCommand(intake, conveyor, true));
 
     shootButton.whileHeld(new AutoShootCommand(shooter, limelight, driveTrain));
 
-    feedButton.whileHeld(new FeedWhenReadyCommand(sequencer, shooter));
+    feedButton.whileHeld(new FeedWhenReadyCommand(sequencer, shooter, conveyor));
 
     driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));
     sequencer.setDefaultCommand(new indexCommand(sequencer));
@@ -181,29 +160,45 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
+    if (autoChooser.getSelected() == 1){
     return new SequentialCommandGroup(
       new ParallelDeadlineGroup(
         new AutoShootCommand(shooter, limelight, driveTrain).withTimeout(2),
         new AutoFeedShooter(sequencer, conveyor)
         ),
       new ParallelDeadlineGroup(
-        new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 1, 1), true, driveTrain), 
-        new IntakeCommand(intake, conveyor)
+        new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 2, 1.5), true, driveTrain), 
+        new IntakeCommand(intake, conveyor, false)
         ),
       new ParallelDeadlineGroup(
         new AutoShootCommand(shooter, limelight, driveTrain).withTimeout(2),
         new AutoFeedShooter(sequencer, conveyor)
         ),
       new ParallelDeadlineGroup(
-        new FollowPathPlannerPath(PathPlanner.loadPath("New New Path", 1, 1), false, driveTrain),
-        new IntakeCommand(intake, conveyor)
+        new FollowPathPlannerPath(PathPlanner.loadPath("New New Path", 2, 1.5), false, driveTrain),
+        new IntakeCommand(intake, conveyor, false)
         ),
       new ParallelCommandGroup(
-        new IntakeCommand(intake, conveyor),
+        new IntakeCommand(intake, conveyor, true),
         new AutoShootCommand(shooter, limelight, driveTrain),
         new AutoFeedShooter(sequencer, conveyor)
         )
     );
+    }else if (autoChooser.getSelected() == 2){
+      return new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+        new FollowPathPlannerPath(PathPlanner.loadPath("New New New Path", 2, 1.5), true, driveTrain), 
+        new IntakeCommand(intake, conveyor, false)
+        ), 
+        new ParallelCommandGroup(
+          new IntakeCommand2(intake, true),
+          new AutoShootCommand(shooter, limelight, driveTrain),
+          new AutoFeedShooter(sequencer, conveyor)
+        )
+      );
+    } else {
+      return new WaitCommand(1);
+    }
     // double startPosition = autoChooser.getSelected().doubleValue();
     // ParallelCommandGroup shootandfeed = new ParallelCommandGroup(new AutoShootCommand(shooter, limelight, driverController, driveTrain), new AutoFeedCommand(sequencer));
     // return new SequentialCommandGroup(new DumbAutoDrive(driveTrain, startPosition, intake), shootandfeed);
