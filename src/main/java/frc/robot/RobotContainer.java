@@ -54,7 +54,7 @@ public class RobotContainer {
     configureButtonBindings();
     limelight.setLEDMode(LedMode.kOff);
     autoChooser.addOption("5 Ball", Double.valueOf(1));
-    autoChooser.setDefaultOption("2 Ball", Double.valueOf(1));
+    autoChooser.setDefaultOption("2 Ball", Double.valueOf(2));
     autoChooser.addOption("Do Nothing", Double.valueOf(-1));
     SmartDashboard.putData(autoChooser);
   }
@@ -167,7 +167,7 @@ public class RobotContainer {
         new AutoFeedShooter(sequencer, conveyor)
         ),
       new ParallelDeadlineGroup(
-        new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 2, 1.5), true, driveTrain), 
+        new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 2.5, 1.5), true, driveTrain), 
         new IntakeCommand(intake, conveyor, false)
         ),
       new ParallelDeadlineGroup(
@@ -175,7 +175,7 @@ public class RobotContainer {
         new AutoFeedShooter(sequencer, conveyor)
         ),
       new ParallelDeadlineGroup(
-        new FollowPathPlannerPath(PathPlanner.loadPath("New New Path", 2, 1.5), false, driveTrain),
+        new FollowPathPlannerPath(PathPlanner.loadPath("New New Path", 2.5, 1.5), false, driveTrain),
         new IntakeCommand(intake, conveyor, false)
         ),
       new ParallelCommandGroup(

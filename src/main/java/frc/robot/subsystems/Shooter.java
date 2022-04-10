@@ -51,8 +51,8 @@ public class Shooter extends SubsystemBase {
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> speedMap = new InterpolatingTreeMap<>();
   static {
     speedMap.put(new InterpolatingDouble(67.8), new InterpolatingDouble(1900.0));
-    speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(2000.0));
-    speedMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(2100.0)); //2200
+    speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(1900.0));
+    speedMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(2200.0)); //2200
     speedMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(2450.0));
     speedMap.put(new InterpolatingDouble(368.0), new InterpolatingDouble(3000.0));
   }
@@ -160,8 +160,8 @@ public class Shooter extends SubsystemBase {
 
    //derek
    public void setTurretPosition(double position, double angular){
-     double spinFactor = createSmartDashboardNumber("Spin On Spot Factor", 1.3);
-     angular = angular * spinFactor; //rad/sec to percent output
+     double spinFactor = createSmartDashboardNumber("Spin On Spot Factor", 0.0);
+     angular = 0;//angular * spinFactor; //rad/sec to percent output
      turretPID.setReference(position, ControlType.kPosition, 0, angular, ArbFFUnits.kPercentOut); 
      //turretPID.setReference(value, ctrl, pidSlot, arbFeedforward, arbFFUnits) //options are percent output or voltage
    }

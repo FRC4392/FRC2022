@@ -35,6 +35,10 @@ public class ClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    if (mController.getBackButton()){
+      mClimber.disableSoftStop();
+    }
   if(Math.abs(mController.getLeftY()) > 0.1){
     mClimber.setSpeed(mController.getLeftY());
   } else{

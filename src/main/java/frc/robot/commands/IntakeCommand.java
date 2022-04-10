@@ -9,15 +9,17 @@ import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
 
 public class IntakeCommand extends CommandBase {
-  public final Intake mIntake;
-  public final Conveyor mConveyor;
+  private final Intake mIntake;
+  private final Conveyor mConveyor;
+  private final boolean liftAtEnd;
 
   /** Creates a new Intake. */
-  public IntakeCommand(Intake intake, Conveyor conveyor) {
+  public IntakeCommand(Intake intake, Conveyor conveyor, boolean liftAtEnd) {
     // Use addRequirements() here to declare subsystem dependencies.
     mIntake = intake;
     mConveyor = conveyor;
-    
+    this.liftAtEnd = liftAtEnd;
+
     addRequirements(mIntake, mConveyor);
   }
 
@@ -36,7 +38,9 @@ public class IntakeCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    mIntake.lift();
+    if (liftAtEnd){
+      mIntake.lift();
+    }
     mIntake.stop();
     mConveyor.setSpeed(0);
   }

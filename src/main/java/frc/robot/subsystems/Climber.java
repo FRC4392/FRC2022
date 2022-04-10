@@ -60,8 +60,8 @@ public class Climber extends SubsystemBase {
 }
 
 public void lift(){
-  climber1.setSoftLimit(SoftLimitDirection.kReverse, -101);
-  climber2.setSoftLimit(SoftLimitDirection.kReverse, -101);
+  climber1.setSoftLimit(SoftLimitDirection.kReverse, -121);
+  climber2.setSoftLimit(SoftLimitDirection.kReverse, -121);
   pivot.set(false);
   }
 
@@ -69,6 +69,11 @@ public void lower(){
   climber1.setSoftLimit(SoftLimitDirection.kReverse, -150); //change max limit when we pivot
   climber2.setSoftLimit(SoftLimitDirection.kReverse, -150); 
   pivot.set(true);
+}
+
+public void disableSoftStop(){
+  climber1.enableSoftLimit(SoftLimitDirection.kReverse, false);
+  climber2.enableSoftLimit(SoftLimitDirection.kReverse, false);
 }
   @Override
   public void periodic() {
