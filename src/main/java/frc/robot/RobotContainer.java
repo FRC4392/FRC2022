@@ -167,7 +167,7 @@ public class RobotContainer {
         new AutoFeedShooter(sequencer, conveyor)
         ),
       new ParallelDeadlineGroup(
-        new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 2.5, 1.5), true, driveTrain), 
+        new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 3, 2), true, driveTrain), 
         new IntakeCommand(intake, conveyor, false)
         ),
       new ParallelDeadlineGroup(
@@ -175,7 +175,7 @@ public class RobotContainer {
         new AutoFeedShooter(sequencer, conveyor)
         ),
       new ParallelDeadlineGroup(
-        new FollowPathPlannerPath(PathPlanner.loadPath("New New Path", 2.5, 1.5), false, driveTrain),
+        new FollowPathPlannerPath(PathPlanner.loadPath("New New Path", 3, 2), false, driveTrain),
         new IntakeCommand(intake, conveyor, false)
         ),
       new ParallelCommandGroup(

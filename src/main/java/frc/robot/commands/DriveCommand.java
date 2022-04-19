@@ -87,7 +87,7 @@ public class DriveCommand extends CommandBase {
     //boolean fieldRelative = !mController.getRightBumper();
     boolean fieldRelative = true;
 
-    mDrivetrain.drive(driveYLimiter.calculate(yVel), driveXLimiter.calculate(xVel), rotateLimiter.calculate(rotVel), fieldRelative);
+    mDrivetrain.drive(yVel, xVel, rotVel, fieldRelative);
 //  mDrivetrain.drive(yVel,xVel, rotVel, fieldRelative);
 
     //mDrivetrain.setModulesAngle(xVel);

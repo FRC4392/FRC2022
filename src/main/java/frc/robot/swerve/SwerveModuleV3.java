@@ -183,10 +183,14 @@ public class SwerveModuleV3 implements SwerveModule {
     public void setAzimuthZero() {
         // calculate position to increments
         SmartDashboard.putNumber(mName + " Init Position" , AbsoluteEncoderPWM.getPeriod());
-        double position = ((1-((AbsoluteEncoderPWM.getPeriod()-mOffset-0.000001)/0.004095))*360.0)%360.0;
 
-        // SmartDashboard.putNumber(mName + " Init Position" , AbsoluteEncoderPWM.getPeriod());
-        SmartDashboard.putNumber(mName + " Zero Position", position);
+        if (AbsoluteEncoderPWM.getPeriod() < 1){
+            double position = ((1-((AbsoluteEncoderPWM.getPeriod()-mOffset-0.000001)/0.004095))*360.0)%360.0;
+        
+
+            // SmartDashboard.putNumber(mName + " Init Position" , AbsoluteEncoderPWM.getPeriod());
+            SmartDashboard.putNumber(mName + " Zero Position", position);
+        
 
         REVLibError err;
 
@@ -194,6 +198,7 @@ public class SwerveModuleV3 implements SwerveModule {
             err = mAzimuthEncoder.setPosition(position);
             SmartDashboard.putNumber(mName + " Error", err.value);
         } while (err != REVLibError.kOk);
+    }
     }
 
 	@Override
