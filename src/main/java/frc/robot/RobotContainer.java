@@ -175,7 +175,7 @@ public class RobotContainer {
         new AutoFeedShooter(sequencer, conveyor)
         ),
       new ParallelDeadlineGroup(
-        new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 3, 2), true, driveTrain), 
+        new FollowPathPlannerPath(PathPlanner.loadPath("New Path", 3, 1), true, driveTrain), 
         new IntakeCommand(intake, conveyor, false)
         ),
       new ParallelDeadlineGroup(
@@ -183,7 +183,7 @@ public class RobotContainer {
         new AutoFeedShooter(sequencer, conveyor)
         ),
       new ParallelDeadlineGroup(
-        new FollowPathPlannerPath(PathPlanner.loadPath("New New Path", 3, 2), false, driveTrain),
+        new FollowPathPlannerPath(PathPlanner.loadPath("New New Path", 3, 1), false, driveTrain),
         new IntakeCommand(intake, conveyor, false)
         ),
       new ParallelCommandGroup(
@@ -195,7 +195,7 @@ public class RobotContainer {
     }else if (autoChooser.getSelected() == 2){
       return new SequentialCommandGroup(
         new ParallelDeadlineGroup(
-        new FollowPathPlannerPath(PathPlanner.loadPath("New New New Path", 2, 1.5), true, driveTrain), 
+        new FollowPathPlannerPath(PathPlanner.loadPath("New New New Path", 2, 1), true, driveTrain), 
         new IntakeCommand(intake, conveyor, false)
         ), 
         new ParallelCommandGroup(
