@@ -84,10 +84,16 @@ public class DriveCommand extends CommandBase {
     }
     lastScan = mController.getRawButton(7);
 
-    //boolean fieldRelative = !mController.getRightBumper();
-    boolean fieldRelative = true;
+    boolean fieldRelative = !(mController.getRightTriggerAxis()>0);
+    //boolean fieldRelative = true;
 
-    mDrivetrain.drive(yVel, xVel, rotVel, fieldRelative);
+    if (fieldRelative){
+      mDrivetrain.drive(yVel, xVel, rotVel, fieldRelative);
+    } else {
+      mDrivetrain.drive(yVel*-1, xVel*-1, rotVel, fieldRelative);
+    }
+
+    
 //  mDrivetrain.drive(yVel,xVel, rotVel, fieldRelative);
 
     //mDrivetrain.setModulesAngle(xVel);

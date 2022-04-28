@@ -39,6 +39,7 @@ public class ClimbCommand extends CommandBase {
     if (mController.getBackButton()){
       mClimber.disableSoftStop();
     }
+    
   if(Math.abs(mController.getLeftY()) > 0.1){
     mClimber.setSpeed(mController.getLeftY());
   } else{

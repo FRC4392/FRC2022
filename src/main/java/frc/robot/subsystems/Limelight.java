@@ -10,6 +10,7 @@ import java.util.OptionalDouble;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,9 +21,11 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry targetHeight;
   private NetworkTableEntry ledSetting;
   private NetworkTableEntry camMode;
+  private NetworkTableEntry snapshot;
 
   private double heightDifference = 102.625-39.6550;
   private double limelightAngle = 32.5;
+  private Timer snapShotTimer = new Timer();
 
 
   public enum camMode {
@@ -44,6 +47,8 @@ public class Limelight extends SubsystemBase {
     targetHeight = limelightTable.getEntry("ty");
     ledSetting = limelightTable.getEntry("ledMode");
     camMode = limelightTable.getEntry("camMode");
+    snapshot = limelightTable.getEntry("snapshot");
+
   }
 
   public OptionalDouble getAngleOffset(){
@@ -101,9 +106,25 @@ public class Limelight extends SubsystemBase {
     }
   }
 
+  public void takeSnapshot(){
+    snapshot.setNumber(1);
+    snapShotTimer.reset();
+    snapShotTimer.start();
+  }
+
+  public void stopSnapshot(){
+    snapshot.setNumber(0);
+    snapShotTimer.stop();
+    snapShotTimer.reset();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (snapShotTimer.get() > 1){
+      stopSnapshot();
+    }
+
     try {
       SmartDashboard.putNumber("limelightDistance", getDistanceToTarget().getAsDouble());
       SmartDashboard.putNumber("limelightAngle", getAngleOffset().getAsDouble());

@@ -38,6 +38,7 @@ public class AutoShootCommand extends CommandBase {
   @Override
   public void initialize() {
     mLimelight.setLEDMode(LedMode.kOn);
+    mLimelight.takeSnapshot();
   }
 double oldAdjustment = 0;
   // Called every time the scheduler runs while the command is scheduled.
@@ -99,7 +100,7 @@ double oldAdjustment = 0;
       mShooter.setHood(mShooter.getHoodPositionForDistance(limelightDistance));
       mShooter.setPIDVelocity(vdesired * (1.0/rpmtoft) * mToFt);
 
-      if (Math.abs(targetAngle) > 115.0){
+      if (Math.abs(targetAngle) > 190.0){
         targetAngle = 0;
       }
       mShooter.setTurretPosition(targetAngle, speeds.omegaRadiansPerSecond); 
@@ -115,7 +116,7 @@ double oldAdjustment = 0;
       SmartDashboard.putNumber("targetAngle", targetAngle);
       SmartDashboard.putNumber("wantedShotPower", mShooter.getShooterVelocityForDistance(limelightDistance));
     } catch (Exception e) {
-      e.printStackTrace();
+      //e.printStackTrace();
       mShooter.setTurretSpeed(0);
     }
   }
@@ -125,6 +126,7 @@ double oldAdjustment = 0;
   public void end(boolean interrupted) {
     mShooter.setHood(0);
     mShooter.setVelocity(0);
+    //mLimelight.stopSnapshot();
     mLimelight.setLEDMode(LedMode.kOff);
   }
 

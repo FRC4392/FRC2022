@@ -73,6 +73,10 @@ public class RobotContainer {
     POVButton hint45RightButton = new POVButton(operatorController, 45);
     POVButton hintLeftButton = new POVButton(operatorController, 270);
     POVButton hintRightButton = new POVButton(operatorController, 90);
+    POVButton hint45BackLeftButton = new POVButton(operatorController, 225);
+    POVButton hint45BackRightButton = new POVButton(operatorController, 135);
+    POVButton hintBackButton = new POVButton(operatorController, 180);
+
 
     // Trigger ClimbTrigger = new Trigger(() -> {
     //   return (operatorController.getLeftTriggerAxis() > 0) && (operatorController.getRightTriggerAxis()>0);
@@ -108,6 +112,10 @@ public class RobotContainer {
     hint45RightButton.whileHeld(new HintTurretDirection(shooter, 45, driveTrain));
     hintLeftButton.whileHeld(new HintTurretDirection(shooter, -90, driveTrain));
     hintRightButton.whileHeld(new HintTurretDirection(shooter, 90, driveTrain));
+    hint45BackLeftButton.whileHeld(new HintTurretDirection(shooter, -135, driveTrain));
+    hint45RightButton.whileHeld(new HintTurretDirection(shooter, 135, driveTrain));
+    hintBackButton.whileHeld(new HintTurretDirection(shooter, 180, driveTrain));
+
 
 
 /*

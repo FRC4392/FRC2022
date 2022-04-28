@@ -61,6 +61,8 @@ public class SwerveModuleV3 implements SwerveModule {
         mDrivePID.setP(.1);
         
         mAzimuthPID = mAzimuthMotor.getPIDController();
+
+        mDriveMotor.setOpenLoopRampRate(.1);
     }
 
     // Sets the drive motor speed in open loop mode
@@ -105,8 +107,8 @@ public class SwerveModuleV3 implements SwerveModule {
         mDriveMotor.setIdleMode(IdleMode.kCoast);
         mDriveMotor.setSmartCurrentLimit(40, 60, 5700);
 
-        mDriveMotor.burnFlash();
-        mAzimuthMotor.burnFlash();
+        //mDriveMotor.burnFlash();
+        //mAzimuthMotor.burnFlash();
 
         setAzimuthZero();
     }

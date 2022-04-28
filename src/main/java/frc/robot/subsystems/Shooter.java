@@ -99,8 +99,8 @@ public class Shooter extends SubsystemBase {
     hoodPID = hood.getPIDController();
     hoodPID.setP(4.0);
 
-    turret.setSoftLimit(SoftLimitDirection.kForward, 100);
-    turret.setSoftLimit(SoftLimitDirection.kReverse, -100);
+    turret.setSoftLimit(SoftLimitDirection.kForward, 190);
+    turret.setSoftLimit(SoftLimitDirection.kReverse, -190);
 
     turretEncoder = turret.getEncoder();
     turretEncoder.setPositionConversionFactor(360.0/112.0);
