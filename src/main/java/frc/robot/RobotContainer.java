@@ -101,6 +101,9 @@ public class RobotContainer {
     JoystickButton brakeButton = new JoystickButton(driverController, XboxController.Button.kB.value);
     //auto feed overrides normal feed (done)
 
+
+
+    
     //auto eject button Right trigger (done)
     Trigger autoEjectTrigger = new Trigger(() -> {
       return (operatorController.getRightTriggerAxis() > 0) && !(operatorController.getLeftTriggerAxis() > 0);
