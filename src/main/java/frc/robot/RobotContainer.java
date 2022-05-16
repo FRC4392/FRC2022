@@ -136,8 +136,8 @@ public class RobotContainer {
     manualMoveButton.whenPressed(new ManualMoveTurretCommand(shooter, operatorController));
 
     fixedShotOneButton.whileHeld(new FixedShotCommand(shooter, 2200, .5));
-    fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 400, 1));
-    fixedShotThreeButton.whileHeld(new FixedShotCommand(shooter, 300, 1));
+    fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 400, 0));
+    fixedShotThreeButton.whileHeld(new FixedShotCommand(shooter, 6000, 0));
     fixedShotFourButton.whileHeld(new FixedShotCommand(shooter, 6000, 1));
     
     brakeButton.whileActiveContinuous(new SwerveBrakeCommand(driveTrain));
