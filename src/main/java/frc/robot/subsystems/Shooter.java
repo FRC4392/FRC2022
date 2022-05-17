@@ -110,9 +110,9 @@ public class Shooter extends SubsystemBase {
 
     turretEncoder.setPosition(cancoder.getPosition());
 
-    canifier.setLEDOutput(1, LEDChannel.LEDChannelC);
-    canifier.setLEDOutput(0, LEDChannel.LEDChannelA);
-  
+    canifier.setLEDOutput(0.57, LEDChannel.LEDChannelC);
+    canifier.setLEDOutput(0.26, LEDChannel.LEDChannelA);
+    
   }
     public void setVelocity(double velocity) {
       //setpoint = velocity;
