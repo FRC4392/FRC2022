@@ -134,7 +134,7 @@ public class RobotContainer {
     ClimbTrigger.whileHeld(new ClimbCommand(climber, shooter, operatorController));
 
     reverseTowerTrigger.whileActiveContinuous(new ReverseTowerCommand(sequencer));
-    manualMoveButton.whileHeld(new ManualMoveTurretCommand(shooter, operatorController));
+    manualMoveButton.whileActiveContinuous(new ManualMoveTurretCommand(shooter, operatorController));
 
     fixedShotOneButton.whileHeld(new FixedShotCommand(shooter, 1300, 1));
     fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 400, 0));
