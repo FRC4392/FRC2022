@@ -56,6 +56,7 @@ public class RobotContainer {
     autoChooser.addOption("5 Ball", Double.valueOf(1));
     autoChooser.setDefaultOption("2 Ball", Double.valueOf(2));
     autoChooser.addOption("Do Nothing", Double.valueOf(-1));
+    autoChooser.addOption("Abby's button DO NOT TOUCH", Double.valueOf(-1));
     SmartDashboard.putData(autoChooser);
   }
 
@@ -133,10 +134,10 @@ public class RobotContainer {
     ClimbTrigger.whileHeld(new ClimbCommand(climber, shooter, operatorController));
 
     reverseTowerTrigger.whileActiveContinuous(new ReverseTowerCommand(sequencer));
-    manualMoveButton.whenPressed(new ManualMoveTurretCommand(shooter, operatorController));
+    manualMoveButton.whileHeld(new ManualMoveTurretCommand(shooter, operatorController));
 
-    fixedShotOneButton.whileHeld(new FixedShotCommand(shooter, 1200, 1));
-    fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 1000, 1));
+    fixedShotOneButton.whileHeld(new FixedShotCommand(shooter, 1300, 1));
+    fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 400, 0));
     fixedShotThreeButton.whileHeld(new FixedShotCommand(shooter, 6000, 0));
     fixedShotFourButton.whileHeld(new FixedShotCommand(shooter, 6000, 1));
     
