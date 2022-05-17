@@ -47,14 +47,12 @@ double oldAdjustment = 0;
     try {
 
      ChassisSpeeds speeds = mDrivetrain.getSpeeds(); //gets the .toChassisSpeeds
-     speeds.vxMetersPerSecond = 0;
-     speeds.vyMetersPerSecond = 0;
 
      double rpmtoft = 20.0 / 4000.0; //guess and check number, higher numbers means the robot speeds affects the shot more, and vice versa
-     double turretFactor = 5.0; // 5.0turret angle guess and check number, higher numbers makes the adjusted turret angle larger
+     double turretFactor = 1.0; // 5.0turret angle guess and check number, higher numbers makes the adjusted turret angle larger
      
      rpmtoft = mShooter.createSmartDashboardNumber("RPM Factor", 12.3)/4000.0;
-     turretFactor = mShooter.createSmartDashboardNumber("Turret Factor", 5.0);
+     turretFactor = mShooter.createSmartDashboardNumber("Turret Factor", 1.0);
 
      double ftToM = 0.3048;
      double mToFt = 1.0 / ftToM;
