@@ -113,9 +113,13 @@ public class Shooter extends SubsystemBase {
     //canifier.setLEDOutput(0.57, LEDChannel.LEDChannelC);
     //canifier.setLEDOutput(0.26, LEDChannel.LEDChannelA);
     
-    canifier.setLEDOutput(0.5, LEDChannel.LEDChannelC); //Blue
+   /* canifier.setLEDOutput(0.5, LEDChannel.LEDChannelC); //Blue
     canifier.setLEDOutput(0, LEDChannel.LEDChannelB); //Red
-    canifier.setLEDOutput(0.5, LEDChannel.LEDChannelA); //Green
+    canifier.setLEDOutput(0.5, LEDChannel.LEDChannelA); //Green */
+
+    canifier.setLEDOutput(0, LEDChannel.LEDChannelC); //Blue
+    canifier.setLEDOutput(1, LEDChannel.LEDChannelB); //Red
+    canifier.setLEDOutput(0, LEDChannel.LEDChannelA); //Green
   }
     public void setVelocity(double velocity) {
       //setpoint = velocity;
