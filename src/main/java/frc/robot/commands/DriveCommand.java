@@ -54,7 +54,7 @@ public class DriveCommand extends CommandBase {
     xVel = mController.getLeftX();
 
     //slow down button
-    if(mController.getRightBumper()){
+    if(!mController.getRightBumper()){
       driveFactor = 0.3;
     } else {
       driveFactor = 1.0;
