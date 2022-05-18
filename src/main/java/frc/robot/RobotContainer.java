@@ -5,14 +5,11 @@
 package frc.robot;
 
 import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -117,7 +114,7 @@ public class RobotContainer {
     hintLeftButton.whileHeld(new HintTurretDirection(shooter, -90, driveTrain));
     hintRightButton.whileHeld(new HintTurretDirection(shooter, 90, driveTrain));
     hint45BackLeftButton.whileHeld(new HintTurretDirection(shooter, -135, driveTrain));
-    hint45RightButton.whileHeld(new HintTurretDirection(shooter, 135, driveTrain));
+    hint45BackRightButton.whileHeld(new HintTurretDirection(shooter, 135, driveTrain));
     hintBackButton.whileHeld(new HintTurretDirection(shooter, 180, driveTrain));
 
 
@@ -156,7 +153,6 @@ public class RobotContainer {
     intakeButton.toggleWhenActive(new IntakeCommand(intake, conveyor, true));
 
     shootButton.whileHeld(new AutoShootCommand(shooter, limelight, driveTrain));
-
     feedButton.whileHeld(new FeedWhenReadyCommand(sequencer, shooter, conveyor));
 
     driveTrain.setDefaultCommand(new DriveCommand(driveTrain, driverController));

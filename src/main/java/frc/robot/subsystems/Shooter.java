@@ -40,6 +40,10 @@ public class Shooter extends SubsystemBase {
   private SparkMaxPIDController turretPID;
   private CANifier canifier = new CANifier(55);
   private CANCoder cancoder = new CANCoder(56);
+
+  double wow = 0;
+  double wow2 = 0;
+
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> hoodMap = new InterpolatingTreeMap<>();
   static {
     hoodMap.put(new InterpolatingDouble(63.5), new InterpolatingDouble(0.1));
@@ -110,16 +114,16 @@ public class Shooter extends SubsystemBase {
 
     turretEncoder.setPosition(cancoder.getPosition());
 
-    //canifier.setLEDOutput(0.57, LEDChannel.LEDChannelC);
+    //canifier.setLEDOutput(0.57, LEDChannel.LEDChannelC); //4392 blue ratio
     //canifier.setLEDOutput(0.26, LEDChannel.LEDChannelA);
     
-   /* canifier.setLEDOutput(0.5, LEDChannel.LEDChannelC); //Blue
-    canifier.setLEDOutput(0, LEDChannel.LEDChannelB); //Red
-    canifier.setLEDOutput(0.5, LEDChannel.LEDChannelA); //Green */
+    
 
-    canifier.setLEDOutput(0, LEDChannel.LEDChannelC); //Blue
-    canifier.setLEDOutput(1, LEDChannel.LEDChannelB); //Red
-    canifier.setLEDOutput(0, LEDChannel.LEDChannelA); //Green
+    
+    canifier.setLEDOutput(0, LEDChannel.LEDChannelB); //Red
+    canifier.setLEDOutput(0, LEDChannel.LEDChannelA); //Green 
+ 
+
   }
     public void setVelocity(double velocity) {
       //setpoint = velocity;
@@ -200,6 +204,10 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    wow = Math.abs(Math.sin(wow2/10));
+    wow2 = wow2+1;
+    canifier.setLEDOutput(wow, LEDChannel.LEDChannelC); //Blue
+    SmartDashboard.putNumber("wow", wow);
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("hoodEncoder", hoodEncoder.getPosition());
     SmartDashboard.putNumber("turretEncoder", turretEncoder.getPosition());
