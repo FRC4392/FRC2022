@@ -96,7 +96,7 @@ public class RobotContainer {
     JoystickButton fixedShotFourButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
 
     //swerve brake B button (done)
-    JoystickButton brakeButton = new JoystickButton(driverController, XboxController.Button.kB.value);
+    JoystickButton brakeButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
     //auto feed overrides normal feed (done)
 
 
