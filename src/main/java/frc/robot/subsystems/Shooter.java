@@ -23,7 +23,10 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.InterpolatingDouble;
 import frc.robot.util.InterpolatingTreeMap;
@@ -40,6 +43,8 @@ public class Shooter extends SubsystemBase {
   private SparkMaxPIDController turretPID;
   private CANifier canifier = new CANifier(55);
   private CANCoder cancoder = new CANCoder(56);
+  private int x = 0;
+  int y = 0;
 
   double wow = 0;
   double wow2 = 0;
@@ -114,14 +119,9 @@ public class Shooter extends SubsystemBase {
 
     turretEncoder.setPosition(cancoder.getPosition());
 
-    //canifier.setLEDOutput(0.57, LEDChannel.LEDChannelC); //4392 blue ratio
-    //canifier.setLEDOutput(0.26, LEDChannel.LEDChannelA);
-    
-    
-
-    
-    canifier.setLEDOutput(0, LEDChannel.LEDChannelB); //Red
-    canifier.setLEDOutput(0, LEDChannel.LEDChannelA); //Green 
+    canifier.setLEDOutput(0, LEDChannel.LEDChannelC); //blue
+    canifier.setLEDOutput(0, LEDChannel.LEDChannelA); //green
+    canifier.setLEDOutput(1, LEDChannel.LEDChannelB); //Red
  
 
   }
@@ -204,10 +204,25 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    wow = Math.abs(Math.sin(wow2/10));
-    wow2 = wow2+1;
-    canifier.setLEDOutput(wow, LEDChannel.LEDChannelC); //Blue
-    SmartDashboard.putNumber("wow", wow);
+    y++;
+
+    if (y == 10){
+      y=0;
+    x++;
+
+    Color color = Color.fromHSV(x, 255, 255);
+
+    canifier.setLEDOutput(color.blue/2.0 , LEDChannel.LEDChannelC); // 
+    canifier.setLEDOutput(color.red/2.0, LEDChannel.LEDChannelB); //
+    canifier.setLEDOutput(color.green/2.0, LEDChannel.LEDChannelA); // 
+
+    if (x>=180){
+      x = 0;
+    }
+  }
+
+    SmartDashboard.putNumber("x", x);
+
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("hoodEncoder", hoodEncoder.getPosition());
     SmartDashboard.putNumber("turretEncoder", turretEncoder.getPosition());
