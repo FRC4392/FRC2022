@@ -43,6 +43,8 @@ double oldAdjustment = 0;
   public void execute() {
     try {
 
+      
+
      ChassisSpeeds speeds = mDrivetrain.getSpeeds(); //gets the .toChassisSpeeds
 
      double rpmtoft = 20.0 / 4000.0; //guess and check number, higher numbers means the robot speeds affects the shot more, and vice versa
