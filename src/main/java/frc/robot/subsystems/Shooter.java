@@ -49,7 +49,7 @@ public class Shooter extends SubsystemBase {
     hoodMap.put(new InterpolatingDouble(63.5), new InterpolatingDouble(0.1));
     hoodMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(0.4));
     hoodMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(0.7));
-    hoodMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(0.85));
+    hoodMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(.61));
     hoodMap.put(new InterpolatingDouble(368.5), new InterpolatingDouble(1.0));
   }
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> speedMap = new InterpolatingTreeMap<>();
@@ -57,7 +57,7 @@ public class Shooter extends SubsystemBase {
     speedMap.put(new InterpolatingDouble(67.8), new InterpolatingDouble(1800.0));
     speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(1850.0));
     speedMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(2100.0)); //2200
-    speedMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(2450.0));
+    speedMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(2900.0));
     speedMap.put(new InterpolatingDouble(368.0), new InterpolatingDouble(2900.0));
   }
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> distanceMap = new InterpolatingTreeMap<>();
@@ -109,7 +109,7 @@ public class Shooter extends SubsystemBase {
     turretEncoder = turret.getEncoder();
     turretEncoder.setPositionConversionFactor(360.0/112.0);
     turretPID = turret.getPIDController();
-    turretPID.setP(0.02);
+    turretPID.setP(0.03);
     turretPID.setOutputRange(-.5, .5);
 
     turretEncoder.setPosition(cancoder.getPosition());

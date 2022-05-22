@@ -97,6 +97,7 @@ public class RobotContainer {
 
     //swerve brake B button (done)
     JoystickButton brakeButton = new JoystickButton(operatorController, 5);
+    JoystickButton brakeButton2 = new JoystickButton(driverController, XboxController.Button.kB.value);
     //auto feed overrides normal feed (done)
 
 
@@ -139,6 +140,7 @@ public class RobotContainer {
     fixedShotFourButton.whileHeld(new FixedShotCommand(shooter, 6000, 1));
     
     brakeButton.whileActiveContinuous(new SwerveBrakeCommand(driveTrain));
+    brakeButton2.whileActiveContinuous(new SwerveBrakeCommand(driveTrain));
     autoEjectTrigger.whileActiveContinuous(new AutoEjectCommand(sequencer, shooter));
 
 
