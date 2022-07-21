@@ -34,7 +34,7 @@ public class AutoShootCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mLimelight.setLEDMode(LedMode.kAuto);
+    mLimelight.setLEDMode(LedMode.kOff);
     mLimelight.takeSnapshot();
   }
 double oldAdjustment = 0;

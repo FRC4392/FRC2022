@@ -90,7 +90,7 @@ public class RobotContainer {
     //manual move turret Right Toggle down (done)
     JoystickButton manualMoveButton = new JoystickButton(operatorController, XboxController.Button.kRightStick.value);
     //fixed shot buttons A B X Y (done)
-    JoystickButton fixedShotOneButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    //JoystickButton fixedShotOneButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
     JoystickButton fixedShotTwoButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
     JoystickButton fixedShotThreeButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
     JoystickButton fixedShotFourButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
@@ -134,10 +134,10 @@ public class RobotContainer {
     reverseTowerTrigger.whileActiveContinuous(new ReverseTowerCommand(sequencer));
     manualMoveButton.whileActiveContinuous(new ManualMoveTurretCommand(shooter, operatorController));
 
-    fixedShotOneButton.whileHeld(new FixedShotCommand(shooter, 1300, 1));
-    fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 400, 0));
-    fixedShotThreeButton.whileHeld(new FixedShotCommand(shooter, 6000, 0));
-    fixedShotFourButton.whileHeld(new FixedShotCommand(shooter, 6000, 1));
+    //fixedShotOneButton.whileHeld(new FixedShotCommand(shooter, 1300, 1));
+    fixedShotTwoButton.whileHeld(new FixedShotCommand(shooter, 500, 1));
+    fixedShotThreeButton.whileHeld(new FixedShotCommand(shooter, 6000, 1));
+    fixedShotFourButton.whileHeld(new FixedShotCommand(shooter, 1100, 1));
     
     brakeButton.whileActiveContinuous(new SwerveBrakeCommand(driveTrain));
     brakeButton2.whileActiveContinuous(new SwerveBrakeCommand(driveTrain));

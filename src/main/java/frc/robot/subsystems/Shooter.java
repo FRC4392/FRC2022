@@ -51,19 +51,19 @@ public class Shooter extends SubsystemBase {
 
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> hoodMap = new InterpolatingTreeMap<>();
   static {
-    hoodMap.put(new InterpolatingDouble(63.5), new InterpolatingDouble(0.1));
-    hoodMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(0.4));
-    hoodMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(0.7));
-    hoodMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(.61));
+    hoodMap.put(new InterpolatingDouble(63.5), new InterpolatingDouble(1.0));
+    hoodMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(1.0));
+    hoodMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(1.0));
+    hoodMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(1.0));
     hoodMap.put(new InterpolatingDouble(368.5), new InterpolatingDouble(1.0));
   }
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> speedMap = new InterpolatingTreeMap<>();
   static {
-    speedMap.put(new InterpolatingDouble(67.8), new InterpolatingDouble(1800.0));
-    speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(1850.0));
-    speedMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(2100.0)); //2200
-    speedMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(2900.0));
-    speedMap.put(new InterpolatingDouble(368.0), new InterpolatingDouble(2900.0));
+    speedMap.put(new InterpolatingDouble(67.8), new InterpolatingDouble(1000.0));
+    speedMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(1500.0));
+    speedMap.put(new InterpolatingDouble(165.0), new InterpolatingDouble(1600.0)); //2200
+    speedMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(1500.0));
+    speedMap.put(new InterpolatingDouble(368.0), new InterpolatingDouble(1500.0));
   }
   private static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> distanceMap = new InterpolatingTreeMap<>();
   static {
@@ -83,7 +83,8 @@ public class Shooter extends SubsystemBase {
     shooter1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     shooter1.config_kF(0, 0.054);
     //shooter1.config_kP(0, 0.005102);
-    shooter1.config_kP(0, 0.1);
+    shooter1.config_kP(0, 0.0005102);
+    shooter1.config_kD(0, 0.005102);
     shooter1.configPeakOutputReverse(0);
     shooter1.configPeakOutputForward(1);
     shooter1.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
@@ -210,11 +211,11 @@ public class Shooter extends SubsystemBase {
       y=0;
     x++;
 
-    Color color = Color.fromHSV(x, 255, 255);
+    //Color color = Color.fromHSV(x, 255, 255);
 
-    canifier.setLEDOutput(color.blue/2.0 , LEDChannel.LEDChannelC); // 
-    canifier.setLEDOutput(color.red/2.0, LEDChannel.LEDChannelB); //
-    canifier.setLEDOutput(color.green/2.0, LEDChannel.LEDChannelA); // 
+    canifier.setLEDOutput(1, LEDChannel.LEDChannelC); // 
+    canifier.setLEDOutput(0, LEDChannel.LEDChannelB); //
+    canifier.setLEDOutput(0, LEDChannel.LEDChannelA); // 
 
     if (x>=180){
       x = 0;
