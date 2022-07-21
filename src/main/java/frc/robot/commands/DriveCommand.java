@@ -9,7 +9,9 @@ package frc.robot.commands;
 
 import org.deceivers.util.JoystickHelper;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -25,15 +27,13 @@ public class DriveCommand extends CommandBase {
   private JoystickHelper yHelper = new JoystickHelper(0);
   private JoystickHelper rotHelper = new JoystickHelper(0);
   private double driveFactor = 1;
-
-  //top secret drive limiters (remove if you don't like them, I just wanted to see them in action)
-  private SlewRateLimiter driveXLimiter = new SlewRateLimiter(4.0);
-  private SlewRateLimiter driveYLimiter = new SlewRateLimiter(4.0);
-  private SlewRateLimiter rotateLimiter = new SlewRateLimiter(2.0);
+  private PIDController rotationController = new PIDController(.1, .1, .1);
 
   public DriveCommand(Drivetrain Drivetrain, XboxController XboxController) {
     mDrivetrain = Drivetrain;
     mController = XboxController;
+
+    rotationController.enableContinuousInput(-180, 180);
     
     addRequirements(mDrivetrain);
   }
@@ -68,7 +68,7 @@ public class DriveCommand extends CommandBase {
       mController.setRumble(RumbleType.kRightRumble, 0);
     }
 
-    rotVel = mController.getRightX();
+    rotVel = mController.getRightTriggerAxis() - mController.getLeftTriggerAxis();
     yVel = yHelper.setInput(yVel).applyDeadband(0.1).value;
     xVel = xHelper.setInput(xVel).applyDeadband(0.1).value;
     rotVel = rotHelper.setInput(rotVel).applyDeadband(0.1).value;
@@ -76,6 +76,16 @@ public class DriveCommand extends CommandBase {
     yVel = yVel*driveFactor;
     xVel = xVel*driveFactor;
     rotVel = rotVel*driveFactor;
+
+    double joystickMagnitude = Math.atan2(mController.getRightX(), mController.getRightY());
+    double joystickAngle = Math.sqrt((mController.getRightY()*mController.getRightY()) + (mController.getRightX()*mController.getRightX()));
+
+    if (joystickMagnitude > 0.25){
+      rotVel = rotationController.calculate(mDrivetrain.getRotation(), joystickAngle);
+      if (Math.abs(rotVel) > 1){
+        rotVel = Math.signum(rotVel);
+      }
+    }
 
     rotVel = -rotVel; //controls were inverted
 
