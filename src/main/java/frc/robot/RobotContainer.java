@@ -149,7 +149,7 @@ public class RobotContainer {
     JoystickButton shootButton = new JoystickButton(operatorController, 6);
     //POVButton upClimb = new POVButton(driverController, 0);
     //POVButton downClimb = new POVButton(driverController, 180);
-    JoystickButton feedButton = new JoystickButton(operatorController, 5);
+    JoystickButton feedButton = new JoystickButton(driverController, XboxController.Button.kA.value);
  
 
     intakeButton.toggleWhenActive(new IntakeCommand(intake, conveyor, true));

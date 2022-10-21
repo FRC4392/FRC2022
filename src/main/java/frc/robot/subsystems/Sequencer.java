@@ -19,7 +19,7 @@ public class Sequencer extends SubsystemBase {
   private DigitalInput endEye = new DigitalInput(0);
 
   private final static double indexSpeed = 0.3;
-  private final static double feedSpeed = .5;
+  private final static double feedSpeed = .8;
   /** Creates a new Sequencer. */
 
   
