@@ -7,12 +7,13 @@
 
 package frc.robot.commands;
 
-import org.deceivers.util.JoystickHelper;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -21,20 +22,35 @@ public class DriveCommand extends CommandBase {
   public XboxController mController;
   private boolean lastScan;
 
-  private JoystickHelper xHelper = new JoystickHelper(0);
-  private JoystickHelper yHelper = new JoystickHelper(0);
-  private JoystickHelper rotHelper = new JoystickHelper(0);
-  private double driveFactor = 1;
+  final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(5);
+  final double TARGET_HEIGHT_METERS = Units.feetToMeters(0);
 
-  //top secret drive limiters (remove if you don't like them, I just wanted to see them in action)
-  private SlewRateLimiter driveXLimiter = new SlewRateLimiter(4.0);
-  private SlewRateLimiter driveYLimiter = new SlewRateLimiter(4.0);
-  private SlewRateLimiter rotateLimiter = new SlewRateLimiter(2.0);
+  final double TARGET_AREA_PERCENT = 0.03;
+
+  // Angle between horizontal and the camera.
+  final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+
+  // How far from the target we want to be
+  final double GOAL_RANGE_METERS = Units.feetToMeters(4);
+
+  // Change this to match the name of your camera (comes from the UI thing,
+  // gloworm is default with this image)
+  PhotonCamera camera = new PhotonCamera("gloworm");
+
+  // PID constants should be tuned per robot
+  final double LINEAR_P = 0.08;
+  final double LINEAR_D = 0.0;
+  PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
+
+  final double ANGULAR_P = 0.008;
+  final double ANGULAR_D = 0.0;
+  PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
   public DriveCommand(Drivetrain Drivetrain, XboxController XboxController) {
+
     mDrivetrain = Drivetrain;
     mController = XboxController;
-    
+
     addRequirements(mDrivetrain);
   }
 
@@ -42,61 +58,76 @@ public class DriveCommand extends CommandBase {
   @Override
   public void initialize() {
   }
- 
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double xVel = 0;
-    double yVel = 0;
-    double rotVel = 0;
 
-    yVel = mController.getLeftY();
-    xVel = mController.getLeftX();
+    double forwardSpeed;
+    double rotationSpeed;
+   
+    if (mController.getAButton()) {
+      // Vision-alignment mode
+      // Query the latest result from PhotonVision
+      var result = camera.getLatestResult();
 
-    //slow down button
-    if(!mController.getRightBumper()){
-      driveFactor = 0.3;
+      if (result.hasTargets()) {
+
+        // First calculate range
+
+        // Method 1: Height in camera FOV vs height difference (works better the greater
+        // difference in height from camera to target)
+        // does not work with 0 height difference
+        // double range = PhotonUtils.calculateDistanceToTargetMeters(
+        // CAMERA_HEIGHT_METERS,
+        // TARGET_HEIGHT_METERS,
+        // CAMERA_PITCH_RADIANS,
+        // Units.degreesToRadians(result.getBestTarget().getPitch()));
+
+        // -1.0 required to ensure positive PID controller effort _increases_ range
+        // forwardSpeed = -forwardController.calculate(range, GOAL_RANGE_METERS); //For
+        // the height difference range method
+
+        // Area based range estimation, kinda bad as the percieved size of the vest will
+        // change depending if the person is running away
+        // or not
+        double range = result.getBestTarget().getArea();
+        forwardSpeed = -forwardController.calculate(range, TARGET_AREA_PERCENT); // percent is 1 at %100??
+
+        System.out.println(Double.toString(range));
+
+        // Also calculate angular power
+        // -1.0 required to ensure positive PID controller effort _increases_ yaw
+        rotationSpeed = -turnController.calculate(result.getBestTarget().getYaw(), 0);
+      } else {
+        // If we have no targets, stay still.
+        forwardSpeed = 0;
+        rotationSpeed = 0;
+      }
     } else {
-      driveFactor = 1.0;
+      // Manual Driver Mode
+      forwardSpeed = -mController.getLeftY();
+      rotationSpeed = mController.getRightX();
     }
 
-    if(DriverStation.isTeleop() && (DriverStation.getMatchTime() < 40.0) && (DriverStation.getMatchTime()>39)){
-      mController.setRumble(RumbleType.kLeftRumble, 1);
-      mController.setRumble(RumbleType.kRightRumble, 1);
-    } else {
-      mController.setRumble(RumbleType.kLeftRumble, 0);
-      mController.setRumble(RumbleType.kRightRumble, 0);
+    // Movement deadzone
+    if (Math.abs(forwardSpeed) < 0.09) {
+      forwardSpeed = 0;
     }
 
-    rotVel = mController.getRightX();
-    yVel = yHelper.setInput(yVel).applyDeadband(0.1).value;
-    xVel = xHelper.setInput(xVel).applyDeadband(0.1).value;
-    rotVel = rotHelper.setInput(rotVel).applyDeadband(0.1).value;
-    
-    yVel = yVel*driveFactor;
-    xVel = xVel*driveFactor;
-    rotVel = rotVel*driveFactor;
+    if (Math.abs(rotationSpeed) < 0.09) {
+      rotationSpeed = 0;
+    }
 
-    rotVel = -rotVel; //controls were inverted
-
-    if (mController.getRawButton(7) &! lastScan){
+    if (mController.getRawButton(7) & !lastScan) {
       mDrivetrain.resetGyro();
     }
     lastScan = mController.getRawButton(7);
 
-    boolean fieldRelative = !(mController.getRightTriggerAxis()>0);
-    //boolean fieldRelative = true;
+    // boolean fieldRelative = !mController.getRightBumper();
+    mDrivetrain.drive(forwardSpeed, 0.0, -rotationSpeed, false);
 
-    if (fieldRelative){
-      mDrivetrain.drive(yVel, xVel, rotVel, fieldRelative);
-    } else {
-      mDrivetrain.drive(yVel*-1, xVel*-1, rotVel, fieldRelative);
-    }
-
-    
-//  mDrivetrain.drive(yVel,xVel, rotVel, fieldRelative);
-
-    //mDrivetrain.setModulesAngle(xVel);
+    // mDrivetrain.setModulesAngle(xVel);
   }
 
   // Called once the command ends or is interrupted.
