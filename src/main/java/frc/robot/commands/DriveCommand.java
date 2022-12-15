@@ -25,7 +25,7 @@ public class DriveCommand extends CommandBase {
   final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(5);
   final double TARGET_HEIGHT_METERS = Units.feetToMeters(0);
 
-  final double TARGET_AREA_PERCENT = 0.03;
+  final double TARGET_AREA_PERCENT = 15;
 
   // Angle between horizontal and the camera.
   final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
@@ -42,7 +42,7 @@ public class DriveCommand extends CommandBase {
   final double LINEAR_D = 0.0;
   PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
 
-  final double ANGULAR_P = 0.008;
+  final double ANGULAR_P = 0.01;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
@@ -92,7 +92,7 @@ public class DriveCommand extends CommandBase {
         // change depending if the person is running away
         // or not
         double range = result.getBestTarget().getArea();
-        forwardSpeed = -forwardController.calculate(range, TARGET_AREA_PERCENT); // percent is 1 at %100??
+        forwardSpeed = -forwardController.calculate(range, TARGET_AREA_PERCENT); 
 
         System.out.println(Double.toString(range));
 
@@ -125,7 +125,7 @@ public class DriveCommand extends CommandBase {
     lastScan = mController.getRawButton(7);
 
     // boolean fieldRelative = !mController.getRightBumper();
-    mDrivetrain.drive(forwardSpeed, 0.0, -rotationSpeed, false);
+    mDrivetrain.drive(-.1*forwardSpeed, 0.0, .5*rotationSpeed, false);
 
     // mDrivetrain.setModulesAngle(xVel);
   }

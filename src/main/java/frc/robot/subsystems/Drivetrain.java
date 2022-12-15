@@ -34,9 +34,9 @@ public class Drivetrain extends SubsystemBase {
   private final PigeonIMU pidgey = new PigeonIMU(10);
 
   private final SwerveModuleV3 Module1 = new SwerveModuleV3(mAzimuth1, mDriveMotor1,
-      new Translation2d(0.259999988, 0.2346), 3, 0.000593, "Module 1"); // 002632 0005867
+      new Translation2d(0.259999988, 0.2346), 3, 0.000895, "Module 1"); // 002632 0005867
   private final SwerveModuleV3 Module2 = new SwerveModuleV3(mAzimuth2, mDriveMotor2,
-      new Translation2d(0.259999988, -0.2346), 4, 0.001790, "Module 2"); // 00380 001793
+      new Translation2d(0.259999988, -0.2346), 4, 0.000645, "Module 2"); // 00380 001793
   private final SwerveModuleV3 Module3 = new SwerveModuleV3(mAzimuth3, mDriveMotor3,
       new Translation2d(-0.259999988, -0.2346), 5, 0.003690, "Module 3"); // 001155 002707
   private final SwerveModuleV3 Module4 = new SwerveModuleV3(mAzimuth4, mDriveMotor4,
@@ -90,9 +90,9 @@ public class Drivetrain extends SubsystemBase {
     mSwerveDrive.log();
     SmartDashboard.putNumber("GyroAbs", pidgey.getFusedHeading());
 
-    rainbow();
+    //rainbow();
     // Set the LEDs
-    m_led.setData(m_ledBuffer);
+   // m_led.setData(m_ledBuffer);
   }
 
   public void setLocation(double x, double y, double angle) {
@@ -128,7 +128,8 @@ public class Drivetrain extends SubsystemBase {
   public void setModulesAngle(double angle, int module) {
     mSwerveDrive.setModulesAngle(angle, module);
   }
-
+}
+/*
   private void rainbow() {
     // For every pixel
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
@@ -144,3 +145,4 @@ public class Drivetrain extends SubsystemBase {
     m_rainbowFirstPixelHue %= 180;
   }
 }
+*/
