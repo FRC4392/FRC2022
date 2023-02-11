@@ -12,6 +12,8 @@ import org.deceivers.util.JoystickHelper;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -28,6 +30,12 @@ public class DriveCommand extends CommandBase {
   private JoystickHelper rotHelper = new JoystickHelper(0);
   private double driveFactor = 1;
   private PIDController rotationController = new PIDController(.1, .1, .1);
+ 
+  private AddressableLED m_led = new AddressableLED(0);
+  private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(160);
+
+  private int ledtimer = 0;
+  private double ledseconds = 0;
 
   public DriveCommand(Drivetrain Drivetrain, XboxController XboxController) {
     mDrivetrain = Drivetrain;
@@ -52,6 +60,33 @@ public class DriveCommand extends CommandBase {
 
     yVel = mController.getLeftY();
     xVel = mController.getLeftX();
+
+  ledtimer = ledtimer + 1;
+  ledseconds = (float)ledtimer / 5.0;
+
+    m_led.setLength(m_ledBuffer.getLength());
+   // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      // Sets the specified LED to the RGB values for red
+      //m_ledBuffer.setRGB(i, 0, 0, 255); //single color
+      //m_ledBuffer.setRGB(i,0,255,0);
+   //}
+  if(((int)ledseconds%2) == 0){
+    m_ledBuffer.setRGB((int)ledseconds,255,0,0);
+  }else{
+    m_ledBuffer.setRGB((int)ledseconds,0,0,255);
+  }
+  if(ledtimer > 798){
+    ledtimer = 0;
+  }
+    System.out.println(ledtimer);
+    // Set the data
+    m_led.setData(m_ledBuffer);
+    m_led.start();
+    
+
+    //spiral of colors
+    //alternating colors
+    //snake movement
 
     //slow down button
     if(!mController.getRightBumper()){
@@ -86,6 +121,7 @@ public class DriveCommand extends CommandBase {
         rotVel = Math.signum(rotVel);
       }
     }
+
 
     rotVel = -rotVel; //controls were inverted
 
